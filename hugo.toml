@@ -1,0 +1,4 @@
+baseURL = 'https://oninebx.github.io/blog'
+languageCode = 'en-us'
+title = "Ryan's blog"
+theme = "mainroad"
