@@ -2,3 +2,10 @@ baseURL = 'https://oninebx.github.io/blog'
 languageCode = 'en-us'
 title = "Ryan's blog"
 theme = "mainroad"
+
+[Params.sidebar]
+  home = "right"   # Configure layout for home page
+  list = "right"   # Configure layout for list pages
+  single = "right" # Configure layout for single pages
+  # Enable widgets in given order
+  widgets = ["search", "recent", "categories", "taglist"]
