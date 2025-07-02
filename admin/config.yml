@@ -1,14 +1,15 @@
 backend:
-  name: git-gateway
+  name: github
   repo: oninebx/blog
   branch: main
+  base_url: https://oauth-oninebx.netlify.app
 
-media_folder: "assets/uploads"
-public_folder: "/assets/uploads"
+media_folder: "uploads"
+public_folder: "/uploads"
 
 collections:
-  - name: "posts"
-    label: "Posts"
+  - name: "blog"
+    label: "Blog"
     folder: "_posts"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
