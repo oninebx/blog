@@ -2,9 +2,6 @@ backend:
   name: github
   repo: oninebx/blog
   branch: main
-  auth_type: pkce
-  base_url: https://oauth-oninebx.netlify.app/oauth
-  auth_endpoint:: start
 
 media_folder: "uploads"
 public_folder: "/uploads"
