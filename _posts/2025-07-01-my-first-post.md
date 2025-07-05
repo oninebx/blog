@@ -1,5 +1,4 @@
 ---
-layout: posts
 title: My First Post - CMS
 date: 2025-06-30
 categories: blog
