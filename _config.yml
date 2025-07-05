@@ -21,7 +21,7 @@ title                    : "Debugging Life"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Ryan Xu"
-description              : "The logs from my real life."
+description              : "Debugging code, logging life."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
@@ -115,7 +115,7 @@ analytics:
 author:
   name             : "Ryan Xu"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I'm a little slow-witted, but a competent programmer who enjoys reading and running."
+  bio              : "Full-stack developer, lifelong reader, and long-distance runner—debugging both code and life."
   location         : "Auckland, New Zealand"
   email            :
   links:
