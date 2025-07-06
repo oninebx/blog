@@ -14,4 +14,50 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Publish Date", name: "date", widget: "datetime" }
+      - label: "Categories"
+        name: "categories"
+        widget: "select"
+        multiple: true
+        options:
+          - "Frontend"
+          - "Backend"
+          - "Full-Stack Notes"
+          - "Code Debugging"
+          - "Performance"
+          - "Architecture"
+          - "Tools & Workflows"
+          - "Books & Reading"
+          - "Career & Mindset"
+          - "Running & Life"
+      - label: "Tags"
+        name: "tags"
+        widget: "select"
+        multiple: true
+        options:
+          - ASP.NET
+          - Entity Framework
+          - LINQ
+          - Authentication
+          - Authorization
+          - C#
+          - .NET
+          - JavaScript
+          - TypeScript
+          - Node.js
+          - React
+          - Next.js
+          - Alpine.js
+          - Tailwind CSS
+          - SQL Server
+          - T-SQL
+          - Query Optimization
+          - Entity Framework Migrations
+          - REST API
+          - Visual Studio
+          - VS Code
+          - Debugging
+          - Performance Tuning
+          - System Design
+          - Code Refactoring
+          - Clean Architecture
       - { label: "Body", name: "body", widget: "markdown" }
