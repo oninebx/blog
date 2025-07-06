@@ -138,11 +138,6 @@ author:
       icon: "fab fa-fw fa-instagram"
       # url: "https://instagram.com/"
 
-# Site Sidebar
-sidebar:
-  nav: "sidebar-nav"
-
-
 # Site Footer
 footer:
   links:
@@ -330,3 +325,5 @@ defaults:
       comments: # true
       share: true
       related: true
+      sidebar:
+        nav: "docs"
