@@ -14,6 +14,10 @@ collections:
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Publish Date", name: "date", widget: "datetime" }
+      - label: "Show TOC"
+        name: "toc"
+        widget: "boolean"
+        default: true
       - label: "Categories"
         name: "categories"
         widget: "select"
