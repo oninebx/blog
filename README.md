@@ -175,6 +175,12 @@ To set up your environment to develop this theme, run `bundle install`.
 
 To test the theme, run `bundle exec rake preview` and open your browser at `http://localhost:4000/test/`. This starts a Jekyll server using content in the `test/` directory. As modifications are made to the theme and test site, it will regenerate and you should see the changes in the browser after a refresh.
 
+To build and serve with live reload, run `bundle exec jekyll serve` and open browser at `http://localhost:4000`
+
+To build the static site only(output to _site/), run `bundle exec jekyll build`
+
+For local-only deployment, you can copy the contents of _site/ to any static web server(e.g. scp, rsync, or a tool like netlify CLI for preview).
+
 ## Credits
 
 ### Creator

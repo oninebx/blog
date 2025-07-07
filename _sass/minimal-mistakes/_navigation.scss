@@ -496,6 +496,10 @@
   text-transform: uppercase;
   border-bottom: 1px solid $border-color;
 }
+.nav__tag-link {
+  margin: 5px;
+  white-space: nowrap;
+}
 
 /*
      Table of contents navigation

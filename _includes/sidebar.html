@@ -15,5 +15,37 @@
       {% include nav_list nav=page.sidebar.nav %}
     {% endif %}
   {% endif %}
+  {% comment %} Render categories in the sidebar using nav_list style {% endcomment %}
+  {% if site.categories %}
+    <nav class="nav__list">
+      <ul class="nav__items">
+          <li>
+              <span class="nav__sub-title">Categories</span>
+              <ul>
+                {% for category in site.categories %}
+                  <li>
+                    <a href="{{ site.baseurl }}/categories/{{ category[0] | slugify }}/">
+                      {{ category[0] }}
+                    </a>
+                  </li>
+                {% endfor %}
+              </ul>
+          </li>
+          <li>
+            <span class="nav__sub-title">Tags</span>
+            {% assign tags = site.tags | sort %}
+            <p>
+              {% for tag in tags %}
+                {% assign tag_name = tag[0] %}
+                {% assign posts = tag[1] %}
+                <a href="{{ site.baseurl }}/tags/{{ tag_name | slugify }}/" class="nav__tag-link">
+                  {{ tag_name }} ({{ posts.size }})
+                </a>
+              {% endfor %}
+              </p>
+          </li>
+      </ul>
+    </nav>
+  {% endif %}
   </div>
 {% endif %}
