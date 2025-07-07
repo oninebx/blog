@@ -2,7 +2,8 @@
 title: My First Post - CMS
 date: 2025-06-30
 toc: true
-categories: blog
+categories:
+  - Code Debugging
 tags:
   - LINQ
   - .NET
