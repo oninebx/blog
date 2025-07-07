@@ -7,11 +7,11 @@ categories:
 tags:
   - LINQ
   - .NET
-  - ASP.NET
-toc: true
 ---
-# Title1
+# T﻿itle1
 
 3Hello, this is my first post!
+
+# T﻿itle 2
 
 M﻿odify it via Netlify cms
