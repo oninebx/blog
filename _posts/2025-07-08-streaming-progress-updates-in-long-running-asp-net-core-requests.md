@@ -21,10 +21,14 @@ Therefore, when I suggested implementing a message window to display progress, e
 
 ### S﻿treaming Response
 
-<﻿div class="mermaid">
+<div class="mermaid">
 graph TD
-A\[Server Processing Chunk 1] --> B\[Write to Response Body] B --> C\[Flush] C --> D\[Client Receives Chunk 1] D --> E\[Server Processing Chunk 2] E --> F\[Write to Response Body] F --> G\[Flush] G --> H\[Client Receives Chunk 2] H --> I\[...]
-<﻿/div>
+    A[Server Processing Chunk 1] --> B[Write to Response Body]
+    B --> C[Flush]
+    C --> D[Client Receives Chunk 1]
+    D --> E[Server Processing Chunk 2]
+    ...
+</div>
 
 ### F﻿etch & Parse Data
 
