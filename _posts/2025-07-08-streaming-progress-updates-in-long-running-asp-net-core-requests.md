@@ -21,10 +21,7 @@ Therefore, when I suggested implementing a message window to display progress, e
 
 ### S﻿treaming Response
 
-
-
-````mermaid
-```mermaid
+<﻿div class="mermaid">
   graph TD
     subgraph Server [Server]
       direction LR
@@ -43,8 +40,7 @@ Therefore, when I suggested implementing a message window to display progress, e
     C2 --> D2[Client Receives Chunk 2]
     C3 --> D3[Client Receives Chunk ...]
     end
-```
-````
+<﻿/div>
 
 ### F﻿etch & Parse Data
 
