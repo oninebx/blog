@@ -13,16 +13,17 @@ This is a feature recently implemented in our project to enhance the user experi
 
 Therefore, when I suggested implementing a message window to display progress, error messages during processing, and completion prompts while blocking user interactions, the entire team immediately agreed. With the help of AI, this feature was quickly implemented, as shown in the image below.
 
-[S﻿ource Code](https://github.com/oninebx/Think2Code/tree/main/DotNet)
+[Source Code](https://github.com/oninebx/Think2Code/tree/main/DotNet)
 
 
-[﻿Preview](https://think2code-w6mi.onrender.com/ShowCase?caseName=StreamingProgress)
+[Preview](https://think2code-w6mi.onrender.com/ShowCase?caseName=StreamingProgress)
 
-![](/uploads/streamingprocess.gif)
 
-## T﻿echnologies Involved
+![](/blog/uploads/streamingprocess.gif)
 
-### S﻿treaming Response
+## Technologies Involved
+
+### Streaming Response
 
 In ASP.NET, the response is backed by a stream for each request. Writing to this stream sends data to the client in chunks, either when the buffer fills or the response ends. Flushing the stream ensures buffered data is sent immediately. The server sends and the client receives data sequentially through a pipeline. As shown in the diagram below. 
 
