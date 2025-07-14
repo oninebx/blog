@@ -14,10 +14,11 @@ This is a feature recently implemented in our project to enhance the user experi
 Therefore, when I suggested implementing a message window to display progress, error messages during processing, and completion prompts while blocking user interactions, the entire team immediately agreed. With the help of AI, this feature was quickly implemented, as shown in the image below.
 
 [S﻿ource Code](https://github.com/oninebx/Think2Code/tree/main/DotNet)
+
+
 [﻿Preview](https://think2code-w6mi.onrender.com/ShowCase?caseName=StreamingProgress)
 
 ![](/uploads/streamingprocess.gif)
-
 
 ## T﻿echnologies Involved
 
@@ -117,4 +118,5 @@ T﻿he following code implements the reading and parsing logic on the client sid
 The static CSS styles in this article are implemented using Tailwind CSS and AI-assisted generation. JavaScript dynamically manages style updates to control the progress bar, window visibility, closing actions, and related behaviors. See the [source code](https://github.com/oninebx/Think2Code/tree/main/DotNet) for details.
 
 ## C﻿onclusion
+
 Leveraging ASP.NET streaming responses with chunked data flushing enables efficient, incremental updates to the client. During the research of this solution, I learned that WebSocket can achieve the same purpose. I welcome readers of this article to leave comments and discuss different approaches.
