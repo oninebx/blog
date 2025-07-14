@@ -21,6 +21,9 @@ Therefore, when I suggested implementing a message window to display progress, e
 
 ### S﻿treaming Response
 
+
+
+````mermaid
 ```mermaid
   graph TD
     subgraph Server [Server]
@@ -41,6 +44,7 @@ Therefore, when I suggested implementing a message window to display progress, e
     C3 --> D3[Client Receives Chunk ...]
     end
 ```
+````
 
 ### F﻿etch & Parse Data
 
