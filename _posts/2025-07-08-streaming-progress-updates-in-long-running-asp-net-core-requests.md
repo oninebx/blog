@@ -14,8 +14,10 @@ This is a feature recently implemented in our project to enhance the user experi
 Therefore, when I suggested implementing a message window to display progress, error messages during processing, and completion prompts while blocking user interactions, the entire team immediately agreed. With the help of AI, this feature was quickly implemented, as shown in the image below.
 
 [S﻿ource Code](https://github.com/oninebx/Think2Code/tree/main/DotNet)
+[﻿Preview](https://think2code-w6mi.onrender.com/ShowCase?caseName=StreamingProgress)
 
 ![](/uploads/streamingprocess.gif)
+
 
 ## T﻿echnologies Involved
 
