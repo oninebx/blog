@@ -21,26 +21,44 @@ Therefore, when I suggested implementing a message window to display progress, e
 
 ### S﻿treaming Response
 
+In ASP.NET, the response is backed by a stream for each request. Writing to this stream sends data to the client in chunks, either when the buffer fills or the response ends. Flushing the stream ensures buffered data is sent immediately. The server sends and the client receives data sequentially through a pipeline. As shown in the diagram below. 
+
 <div class="mermaid">
   graph TD
-    subgraph Server [Server]
+    subgraph Server \[Server]
       direction LR
-      subgraph Chunk1 [Chunk1]
-        A1[Server Processing Chunk 1] --> B1[Write to Response Body] --> C1[Flush]
+      subgraph Chunk1 \[Chunk1]
+        A1\[Server Processing Chunk 1] --> B1\[Write to Response Body] --> C1\[Flush]
       end 
-      subgraph Chunk2[Chunk2]
-        A2[Server Processing Chunk 2] --> B2[Write to Response Body] --> C2[Flush]
+      subgraph Chunk2\[Chunk2]
+        A2\[Server Processing Chunk 2] --> B2\[Write to Response Body] --> C2\[Flush]
       end
-      subgraph Chunk3 [...]
-        A3[Server Processing Chunk ...] --> B3[Write to Response Body] --> C3[Flush]
+      subgraph Chunk3 \[...]
+        A3\[Server Processing Chunk ...] --> B3\[Write to Response Body] --> C3\[Flush]
       end
     end
-    subgraph Client [Client]
-    C1 --> D1[Client Receives Chunk 1]
-    C2 --> D2[Client Receives Chunk 2]
-    C3 --> D3[Client Receives Chunk ...]
+    subgraph Client \[Client]
+    C1 --> D1\[Client Receives Chunk 1]
+    C2 --> D2\[Client Receives Chunk 2]
+    C3 --> D3\[Client Receives Chunk ...]
     end
 </div>
+
+The following code implements a method for sending messages.
+
+```csharp
+async Task FlushProgressMessage(dynamic message, CancellationToken cancellation)
+{
+  if(message == null || cancellation.IsCancellationRequested)
+  {
+    return;
+  }
+  var json = JsonSerializer.Serialize(message);
+  var bytes = Encoding.UTF8.GetBytes(json + "\n");
+  await context.Response.Body.WriteAsync(bytes, 0, bytes.Length);
+  await context.Response.Body.FlushAsync();
+}
+```
 
 ### F﻿etch & Parse Data
 
