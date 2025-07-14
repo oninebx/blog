@@ -62,6 +62,57 @@ async Task FlushProgressMessage(dynamic message, CancellationToken cancellation)
 
 ### F﻿etch & Parse Data
 
+Although each message is flushed on the server side, the browser does not parse them individually and sequentially. For instance, receiving multiple JSON messages in a single read may cause parsing errors. Appending a delimiter to each message enables reliable, incremental parsing.
+
+T﻿he following code implements the reading and parsing logic on the client side.
+
+```javascript
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = "";
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      if (!value) continue;
+
+      buffer += decoder.decode(value, { stream: true });
+      let parts = buffer.split('\n');
+      buffer = parts.pop();
+
+      for (let part of parts) {
+        if (!part.trim()) continue;
+        try {
+          const message = JSON.parse(part);
+          if (message.Progress) {
+            dom.bar.style.width = `${message.Progress}%`;
+          }
+          if (message.Line) {
+            dom.content.style.display = 'block';
+            dom.stream.innerHTML += `<span>${message.Line}</span><br>`;
+            dom.stream.scrollTop = dom.stream.scrollHeight;
+          }
+          if (message.Error) {
+            dom.content.style.display = 'block';
+            dom.stream.innerHTML += `&emsp;<span style='color:#ff5252'>${message.Error}</span><br><br>`;
+            dom.stream.scrollTop = dom.stream.scrollHeight;
+          }
+          if (message.Information) {
+            dom.content.style.display = 'block';
+            dom.stream.innerHTML += `<span style='color:#4caf50'>${message.Information}</span><br>`;
+            dom.stream.scrollTop = dom.stream.scrollHeight;
+          }
+        } catch (err) {
+          console.error('JSON parse error:', err, part);
+        }
+      }
+    }
+```
+
+`﻿
+
 ### C﻿SS Styling
 
+The static CSS styles in this article are implemented using Tailwind CSS and AI-assisted generation. JavaScript dynamically manages style updates to control the progress bar, window visibility, closing actions, and related behaviors. See the [source code](https://github.com/oninebx/Think2Code/tree/main/DotNet) for details.
+
 ## C﻿onclusion
+Leveraging ASP.NET streaming responses with chunked data flushing enables efficient, incremental updates to the client. During the research of this solution, I learned that WebSocket can achieve the same purpose. I welcome readers of this article to leave comments and discuss different approaches.
