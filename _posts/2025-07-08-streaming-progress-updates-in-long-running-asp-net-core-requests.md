@@ -25,22 +25,22 @@ In ASP.NET, the response is backed by a stream for each request. Writing to this
 
 <div class="mermaid">
   graph TD
-    subgraph Server \[Server]
+    subgraph Server [Server]
       direction LR
-      subgraph Chunk1 \[Chunk1]
-        A1\[Server Processing Chunk 1] --> B1\[Write to Response Body] --> C1\[Flush]
+      subgraph Chunk1 [Chunk1]
+        A1[Server Processing Chunk 1] --> B1[Write to Response Body] --> C1[Flush]
       end 
-      subgraph Chunk2\[Chunk2]
-        A2\[Server Processing Chunk 2] --> B2\[Write to Response Body] --> C2\[Flush]
+      subgraph Chunk2[Chunk2]
+        A2[Server Processing Chunk 2] --> B2[Write to Response Body] --> C2[Flush]
       end
-      subgraph Chunk3 \[...]
-        A3\[Server Processing Chunk ...] --> B3\[Write to Response Body] --> C3\[Flush]
+      subgraph Chunk3 [...]
+        A3[Server Processing Chunk ...] --> B3[Write to Response Body] --> C3[Flush]
       end
     end
-    subgraph Client \[Client]
-    C1 --> D1\[Client Receives Chunk 1]
-    C2 --> D2\[Client Receives Chunk 2]
-    C3 --> D3\[Client Receives Chunk ...]
+    subgraph Client [Client]
+    C1 --> D1[Client Receives Chunk 1]
+    C2 --> D2[Client Receives Chunk 2]
+    C3 --> D3[Client Receives Chunk ...]
     end
 </div>
 
