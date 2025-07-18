@@ -21,7 +21,7 @@ The problematic code is used to convert the user's recharged account balance int
  var amount = balance;
  var totalDonations = new List<Donation>();
  var donations = targets.Select(t => CreateDonation(t, ref amount))
-     .Where(d => d.Amount != 0)
+     .Where(d => d.Amount != 0);
  if(donations.Any())
  {
    totalDonations.AddRange(donations);
@@ -59,8 +59,19 @@ The logic of this code is straightforward: when the balance is not less than the
 
 his code is not robust and sometimes fails to generate a Donation based on the specified conditions.
 
-## A﻿nalysis 
+## A﻿nalysis
 
 Deferred execution is one of the core features of `IEnumerable` and is widely used in LINQ queries. This feature separates the definition from the execution, meaning the defined logic is only executed during each iteration. As shown in the code above, the logic inside the `CreateDonation` method is executed once on each iteration.
 
-If the data source that the enumeration depends on changes during execution, each iteration may produce different results. This is one of the side effects of the deferred execution feature of `IEnumerable. `Unfortunately, the code snippet above happens to meet all the conditions that lead to such side effects. `Amount` is the data source that the enumeration depends on, and since it is passed as a reference type parameter, it can be modified during execution. Both `donations.Any()` and `TotalDonations.AddRange(donations)` trigger enumeration traversal, meaning the `donations` enumeration is iterated twice. Although the first traversal triggered by the `Any` method generates donations using the correct `Amount` value, the traversal during `AddRange` creates only invalid donations because by then `Amount` has become 0, resulting in `donation.Amount = 0`. Consequently, all these donations are filtered out.
+If the data source that the enumeration depends on changes during execution, each iteration may produce different results. This is one of the side effects of the deferred execution feature of `IEnumerable.`Unfortunately, the code snippet above happens to meet all the conditions that lead to such side effects. `Amount` is the data source that the enumeration depends on, and since it is passed as a reference type parameter, it can be modified during execution. Both `donations.Any()` and `TotalDonations.AddRange(donations)` trigger enumeration traversal, meaning the `donations` enumeration is iterated twice. Although the first traversal triggered by the `Any` method generates donations using the correct `Amount` value, the traversal during `AddRange` creates only invalid donations because by then `Amount` has become 0, resulting in `donation.Amount = 0`. Consequently, all these donations are filtered out.
+
+## S﻿olution
+
+After identifying the cause, the solution to this problem is straightforward: ensure that the `donations` enumeration is traversed only once by immediately calling the `ToList()` method after its definition to materialize the enumeration. The resulting materialized collection will then contain the valid donations.
+
+```csharp
+...
+var donations = targets.Select(t => CreateDonation(t, ref amount))
+     .Where(d => d.Amount != 0).ToList();
+...
+```
