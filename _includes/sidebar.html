@@ -1,51 +1,61 @@
 {% if page.author_profile or layout.author_profile or page.sidebar %}
-  <div class="sidebar sticky">
+<div class="sidebar sticky">
   {% if page.author_profile or layout.author_profile %}{% include author-profile.html %}{% endif %}
   {% if page.sidebar %}
-    {% for s in page.sidebar %}
-      {% if s.image %}
-        <img src="{{ s.image | relative_url }}"
-             alt="{% if s.image_alt %}{{ s.image_alt }}{% endif %}">
-      {% endif %}
-      {% if s.title %}<h3>{{ s.title }}</h3>{% endif %}
-      {% if s.text %}{{ s.text | markdownify }}{% endif %}
-      {% if s.nav %}{% include nav_list nav=s.nav %}{% endif %}
-    {% endfor %}
-    {% if page.sidebar.nav %}
-      {% include nav_list nav=page.sidebar.nav %}
-    {% endif %}
+  {% for s in page.sidebar %}
+  {% if s.image %}
+  <img src="{{ s.image | relative_url }}" alt="{% if s.image_alt %}{{ s.image_alt }}{% endif %}">
+  {% endif %}
+  {% if s.title %}<h3>{{ s.title }}</h3>{% endif %}
+  {% if s.text %}{{ s.text | markdownify }}{% endif %}
+  {% if s.nav %}{% include nav_list nav=s.nav %}{% endif %}
+  {% endfor %}
+  {% if page.sidebar.nav %}
+  {% include nav_list nav=page.sidebar.nav %}
+  {% endif %}
   {% endif %}
   {% comment %} Render categories in the sidebar using nav_list style {% endcomment %}
   {% if site.categories %}
-    <nav class="nav__list">
-      <ul class="nav__items">
+  <nav class="nav__list">
+    <ul class="nav__items">
+      <li>
+        <span class="nav__sub-title">Categories</span>
+        <ul>
+          {% for category in site.categories %}
           <li>
-              <span class="nav__sub-title">Categories</span>
-              <ul>
-                {% for category in site.categories %}
-                  <li>
-                    <a href="{{ site.baseurl }}/categories/{{ category[0] | slugify }}/">
-                      {{ category[0] }}
-                    </a>
-                  </li>
-                {% endfor %}
-              </ul>
+            <a href="{{ site.baseurl }}/categories/{{ category[0] | slugify }}/">
+              {{ category[0] }}
+            </a>
           </li>
+          {% endfor %}
+        </ul>
+      </li>
+      <li>
+        <span class="nav__sub-title">Tags</span>
+        {% assign tags = site.tags | sort %}
+        <p>
+          {% for tag in tags %}
+          {% assign tag_name = tag[0] %}
+          {% assign posts = tag[1] %}
+          <a href="{{ site.baseurl }}/tags/{{ tag_name | slugify }}/" class="nav__tag-link">
+            {{ tag_name }} ({{ posts.size }})
+          </a>
+          {% endfor %}
+        </p>
+      </li>
+      <li>
+        <span class="nav__sub-title">Archives</span>
+        {% assign posts_by_year = site.posts | group_by_exp:"post", "post.date | date: '%Y'" %}
+        <ul>
+          {% for year in posts_by_year %}
           <li>
-            <span class="nav__sub-title">Tags</span>
-            {% assign tags = site.tags | sort %}
-            <p>
-              {% for tag in tags %}
-                {% assign tag_name = tag[0] %}
-                {% assign posts = tag[1] %}
-                <a href="{{ site.baseurl }}/tags/{{ tag_name | slugify }}/" class="nav__tag-link">
-                  {{ tag_name }} ({{ posts.size }})
-                </a>
-              {% endfor %}
-              </p>
+            <a href="{{ site.baseurl }}/{{ year.name }}/">{{ year.name }}</a> ({{ year.items | size }})
           </li>
-      </ul>
-    </nav>
+          {% endfor %}
+        </ul>
+      </li>
+    </ul>
+  </nav>
   {% endif %}
-  </div>
+</div>
 {% endif %}
