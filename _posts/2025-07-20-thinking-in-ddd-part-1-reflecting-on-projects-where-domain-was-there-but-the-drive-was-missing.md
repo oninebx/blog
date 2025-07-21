@@ -16,4 +16,12 @@ Since the “Domain” has come knocking, I think it’s time to revisit and int
 
 ## Technical Debts
 
-Technical debt exists throughout the entire project lifecycle, but by the time a team becomes aware of it, it has usually shifted from being implicit to explicit, turning into a trouble that can no longer be ignored. I recall that when I was still in China, my colleagues and I frequently complained about the chaos of the project code. Although we were working with technical debt every day, only a few developers had experience in paying it down. Frequent job-hopping and short-lived projects allowed many programmers to avoid dealing with these debts simply.
+Technical debt exists throughout the entire project lifecycle, but by the time a team becomes aware of it, it has usually shifted from being implicit to explicit, turning into a trouble that can no longer be ignored. I recall that when I was still in China, my colleagues and I frequently complained about the chaos of the project code. Although we were working with technical debt every day, only a few developers had experience in paying it down. Frequent job-hopping and short-lived projects allowed many programmers to avoid dealing with these debts simply. But in New Zealand, the situation is somewhat different. The projects I’ve been involved in have been running for over 10 years, and there are quite a few developers who have been serving the same company for 5 or even more than 10 years. Naturally, there is also accumulated technical debt.
+
+
+
+###  'Diverse' Frameworks in monolithic architecture
+
+### Bloated classes in unclear layers
+
+### Over-design and under-design in business implementation
