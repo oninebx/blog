@@ -8,22 +8,30 @@ tags:
   - System Design
   - Code Refactoring
 ---
-As a widely recognized guiding philosophy for architectural design, DDD is a skill I’ve always wanted to master. I once read a few chapters of *Domain-Driven Design: Tackling Complexity in the Heart of Software*, but I stopped shortly after. The book's content is not difficult to understand, but it requires practice in the project to internalize the knowledge.
-
-In my recent projects, I’m quite certain that I’ve been working within the defined domain of the project, as I’ve encountered various things named with “Domain.” However, I didn’t feel any real driving force coming from them.
-
-Since the “Domain” has come knocking, I think it’s time to revisit and internalize DDD. I plan to finish reading the book mentioned above and apply its insights to restore the domain-driven force that should exist in projects. As the first piece in my *Thinking in DDD* series, this article won’t dive into specific technologies. Instead, it’s more of a reflection — or rather, a rant — on the pain points I’ve encountered in past projects. This has always been my original motivation for learning and adopting new technologies.
+In this article, I’ll list a few of the headaches I’ve encountered in recent projects — some of which may have something to do with DDD. There were certainly domain-related elements in the projects, but they didn’t actually drive me to take action. Perhaps these problems are what motivate me to finally read *Domain-Driven Design: Tackling Complexity in the Heart of Software*.
 
 ## Technical Debts
 
-Technical debt exists throughout the entire project lifecycle, but by the time a team becomes aware of it, it has usually shifted from being implicit to explicit, turning into a trouble that can no longer be ignored. I recall that when I was still in China, my colleagues and I frequently complained about the chaos of the project code. Although we were working with technical debt every day, only a few developers had experience in paying it down. Frequent job-hopping and short-lived projects allowed many programmers to avoid dealing with these debts simply. But in New Zealand, the situation is somewhat different. The projects I’ve been involved in have been running for over 10 years, and there are quite a few developers who have been serving the same company for 5 or even more than 10 years. Naturally, they also have to face the ever-accumulating technical debt.
+Since the year before last, the product’s services started experiencing page crashes during traffic peaks, which negatively impacted the company. The technical team conducted weeks of load testing using JMeter and ultimately concluded that the issue was caused by caching database entity objects, which were several times larger than their equivalent DTOs. When the program deserialized these entities to create object instances, it consumed significantly more CPU and memory resources. As traffic scaled up, the service eventually crashed.
 
-### 'Diverse' Frameworks in monolithic architecture
+Fixing this problem would be extremely costly, so it was categorized as technical debt and had to be put on hold — the design was completed in the early stage of the project, and many features were built on top of it.With that lesson learned, the team clarified the boundaries between database entities and DTOs, avoiding their cross-layer use. However, a few months later, new problems emerged: a large number of bloated service-layer objects and arbitrarily defined DTOs were being created. For example, a single service method might implement business logic spanning multiple domains and eventually return a DTO tailored to just one business scenario.
 
-#### **Version Diversity**
+I was certain we were creating new technical debt, as these implementations resembled procedural programming wrapped in an object-oriented shell — making them hard to reuse. Perhaps everyone has a mental model that guides their coding, but these models are neither aligned nor made explicit.
 
-A complete solution is often composed of projects created at different times, so the coexistence of multiple framework versions is a common issue. Some large development platforms, like .NET or J2EE, are robust enough to provide compatibility support. Therefore, upgrading frameworks may be troublesome, but it’s feasible. Moreover, trying to prevent the use of multiple versions isn’t wise, because the cost of maintaining outdated technologies will only increase as related resources diminish. The escalating upgrade costs caused by version diversity across multiple projects are a real headache.
+Additionally, upgrading the development platform has been a persistent headache. We are maintaining code that has been running for over 10 years — with highly complex dependencies between projects and different platform versions, ranging from .NET Framework 4.x to .NET Core 3.x and .NET 6. We've always wanted to upgrade to a higher .NET version to ensure long-term support, but in the end, the amount of code that would need to be changed has made it impractical.
 
-### Bloated classes in unclear layers
+The inability to upgrade old code poses a risk — as related resources diminish, the cost of maintenance will keep rising. Why did we end up creating such a complex codebase that makes refactoring so costly? Perhaps what we need is a healthy model to guide project structuring, reduce dependency complexity, and ensure that refactoring remains feasible at any time.
 
-### Over-design and under-design in business implementation
+## Rediscover ‘Domain’
+
+I’ve read a few chapters of that book on and off, but stopped because I couldn’t apply it in my work. Now that the new leadership has evaluated the technical debt and is considering a project rebuild, addressing these issues has become a priority. This actually aligns with a skill I’ve been honing — using expertise to simplify complexity and uncover the real drivers behind software design.
+
+In various codebases, I’ve seen projects named **Domain**, but I’ve never truly felt any driving force coming from them. In fact, these domain elements are becoming increasingly irrelevant in the code — not only failing to drive the design but sometimes even feeling like burdens we can’t shake off. Perhaps they’ve always carried some force, but after the programmers who designed them left, no one knows how to sense that force or navigate in the right direction.
+
+I’ll continue updating this blog series until DDD helps me solve these problems.
+
+## Rough﻿ Plan
+
+I will start from scratch to design and implement a simple crowdfunding platform called **Simple Fundraising**, which aligns with the domain I’m currently working in. If I get involved in the project rebuild, these designs might even come in handy.
+
+This platform will support users in completing a simple yet complete crowdfunding process. The next chapter will begin with a discussion on **Ubiquitous Language** and use it to describe the Simple Fundraising platform.
