@@ -1,6 +1,5 @@
 ---
-title: "Behind the Scenes of Optimizing an EF Query: Our LINQ vs Stored
-  Procedure Decision"
+title: Improving SQL Performance by Choosing the Right Driving Table
 date: 2025-07-22T22:44:10.602Z
 toc: true
 categories:
