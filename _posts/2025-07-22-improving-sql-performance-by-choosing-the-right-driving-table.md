@@ -13,7 +13,7 @@ tags:
 Recently, I optimized a timeout-prone query in our project to run within seconds. The technical team highly appreciated the improvement. There are some valuable lessons worth summarizing, and the most important one is identifying the correct driving table for the query.
 For clarity, I’ll introduce the tables involved in the query optimization as examples. To avoid any risk of information leakage, only the necessary relationships and fields are included. As shown in the diagram below.
 
-<﻿div class="mermaid">
+<div class="mermaid">
 erDiagram
     Member ||--o{ Profile : "has"
     Payee ||--o{ Profile : "is assigned to"
@@ -58,5 +58,5 @@ erDiagram
         datetime DonatedAt
         bit IsProcessed
     }
-<﻿/div>
+</div>
 
