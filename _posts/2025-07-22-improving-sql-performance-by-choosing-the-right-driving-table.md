@@ -60,3 +60,5 @@ Donation {
 ```
 
 </div>
+
+[D﻿ownload the T-SQL Sample]({{ "uploads/DrivingTable.sql" | relative_url }})
