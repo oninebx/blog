@@ -13,20 +13,12 @@ For clarity, I’ll introduce the tables involved in the query optimization as e
 
 <div class="mermaid">
 erDiagram
-    Member ||--o{ Profile : "has"
     Payee ||--o{ Profile : "is assigned to"
     Profile ||--o{ CausePage : "owns"
     CausePage ||--o{ Donation : "receives"
     
-    Member {
-        int Id PK
-        nvarchar Email
-        datetime CreatedAt
-    }
-
-```
 Payee {
-    int Id PK
+    uniqueidentifier Id PK
     nvarchar Name
     bit Verified
     datetime CreatedAt
@@ -57,8 +49,7 @@ Donation {
     datetime DonatedAt
     bit IsProcessed
 }
-```
 
 </div>
 
-[D﻿ownload the T-SQL Sample]({{ "uploads/DrivingTable.sql" | relative_url }})
+[Download the T-SQL Sample]({{ "uploads/DrivingTable.sql" | relative_url }})
