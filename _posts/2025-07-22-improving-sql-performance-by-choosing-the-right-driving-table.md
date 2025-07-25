@@ -5,8 +5,6 @@ toc: true
 categories:
   - Project Notes
 tags:
-  - LINQ
-  - Entity Framework
   - T-SQL
   - Query Optimization
 ---
@@ -26,37 +24,39 @@ erDiagram
         datetime CreatedAt
     }
 
-    Payee {
-        int Id PK
-        nvarchar Name
-        bit Verified
-        datetime CreatedAt
-    }
+```
+Payee {
+    int Id PK
+    nvarchar Name
+    bit Verified
+    datetime CreatedAt
+}
 
-    Profile {
-        int Id PK
-        int MemberId FK
-        int PayeeId FK
-        nvarchar FullName
-        datetime CreatedAt
-    }
+Profile {
+    int Id PK
+    int MemberId FK
+    int PayeeId FK
+    nvarchar FullName
+    datetime CreatedAt
+}
 
-    CausePage {
-        int Id PK
-        nvarchar Title
-        nvarchar Description
-        decimal TargetAmount
-        int ProfileId FK
-        datetime CreatedAt
-    }
+CausePage {
+    int Id PK
+    nvarchar Title
+    nvarchar Description
+    decimal TargetAmount
+    int ProfileId FK
+    datetime CreatedAt
+}
 
-    Donation {
-        int Id PK
-        int CausePageId FK
-        decimal Amount
-        nvarchar Currency
-        datetime DonatedAt
-        bit IsProcessed
-    }
+Donation {
+    int Id PK
+    int CausePageId FK
+    decimal Amount
+    nvarchar Currency
+    datetime DonatedAt
+    bit IsProcessed
+}
+```
+
 </div>
-
