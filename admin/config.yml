@@ -32,7 +32,7 @@ collections:
           - "Tools & Workflows"
           - "Books & Reading"
           - "Career & Mindset"
-          - "Running & Life"
+          - "嘀嘀嗒嗒"
       - label: "Tags"
         name: "tags"
         widget: "select"
