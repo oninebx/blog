@@ -9,7 +9,7 @@
 {% endif %}
 
 {%- for post in entries -%}
-  {% assign excluded_categories = "点点滴滴" | split: "," %}
+  {% assign excluded_categories = "嘀嘀嗒嗒" | split: "," %}
     {% assign include_post = true %}
     {% for cat in post.categories %}
       {% if excluded_categories contains cat %}
