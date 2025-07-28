@@ -9,5 +9,16 @@
 {% endif %}
 
 {%- for post in entries -%}
-  {% include archive-single.html type=include.type %}
+  {% assign excluded_categories = "点点滴滴" | split: "," %}
+    {% assign include_post = true %}
+    {% for cat in post.categories %}
+      {% if excluded_categories contains cat %}
+        {% assign include_post = false %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+
+  {% if include_post %}
+    {% include archive-single.html type=include.type %}
+  {% endif %}
 {%- endfor -%}
