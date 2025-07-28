@@ -64,4 +64,5 @@ collections:
           - System Design
           - Code Refactoring
           - Clean Architecture
+          - 杂感
       - { label: "Body", name: "body", widget: "markdown" }
