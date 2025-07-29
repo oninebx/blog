@@ -1,12 +1,11 @@
 ---
 title: "Thinking in DDD: A Case of Moving from Code-First to Domain-Driven"
-date: 2025-07-27T21:03:46.390Z
+date: 2025-07-29T12:04:16.691Z
 toc: true
 categories:
   - Architecture
 tags:
   - System Design
-  - C#
   - Code Refactoring
 ---
 The domain of a software program is the subject area of the user's activity or interest that it supports. Every day, we solve problems within the domain, even though we rarely mention it at work. Each person carries a partial and imperfect domain model in their mind, but in a well-functioning team, the domain knowledge should be complete—just distributed among different team members. Building a unified and agreed-upon domain model can effectively bridge the domain knowledge gaps among team members. An efficient model should be able to shape the software’s core design, linking analysis to implementation and aiding maintenance by making the code understandable through the model.
@@ -80,6 +79,7 @@ flowchart TD
 ### Conclusion
 
 In practice, I first implemented the second model above, while the third one became the final version. Fortunately, since much of the business logic code was reusable, the refactoring didn’t take too much time. This experience made me reflect on the importance of the domain model—if the entire team could work under a continuously refined domain model, it would be much more efficient. I’d like to conclude by quoting Eric Evans’ explanation of the role of a domain model, which perfectly captures what I deeply experienced in this case:
-The model dictates the form of the design of the heart of the software.
-The model is the backbone of a language used by all team members.
-The model is distilled knowledge.
+
+* The model dictates the form of the design of the heart of the software.
+* The model is the backbone of a language used by all team members.
+* The model is distilled knowledge.
