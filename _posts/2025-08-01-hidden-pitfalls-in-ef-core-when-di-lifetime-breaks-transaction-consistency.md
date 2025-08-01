@@ -9,4 +9,4 @@ tags:
   - ASP.NET
   - C#
 ---
-d﻿rafting
+As one of the built-in core features of the .NET development platform, **Inversion of Control (IoC)** or **Dependency Injection (DI)** enables flexible, testable, and loosely coupled code by delegating the creation and management of dependencies to a centralized framework, improving maintainability and scalability. We can see it used in almost all ASP.NET Core projects, and may be familiar with the concept of DI object lifetimes. However, when adding a new dependency, we tend to follow similar existing code in the project without carefully considering whether the chosen lifetime is appropriate. The following case is a real-world example where such habitual thinking led to a data inconsistency issue.
