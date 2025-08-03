@@ -1,5 +1,5 @@
 ---
-title: "Lost Updates and Broken Transactions from Incorrect DI Lifecycle"
+title: Lost Updates and Broken Transactions from Incorrect DI Lifecycle
 date: 2025-08-01T10:12:00.595Z
 toc: true
 categories:
@@ -43,8 +43,8 @@ public class AuditService
   }
   ...
 }
-
 ```
+
 IAuditService records changes to entity properties. For example, when a Member's Name or Email changes, RecordChange saves all audit-relevant Member properties as a JSON string.
 
 The inconsistency is that, despite injecting CoreDbContext via the constructor, the Record method uses a CoreDbContext instance passed as a parameter instead. This old and seemingly odd code worked perfectly—until I refactored it into the following form.
@@ -60,11 +60,21 @@ The inconsistency is that, despite injecting CoreDbContext via the constructor, 
     ...
   }
   ...
-
 ```
+
 Obviously, the simplified code is easier to understand, but it throws an exception at runtime.
 
 ![exception]({{ "uploads/broken-transaction-exception.png" | relative_url }})
+
+## Mistrust of the running code
+
+After googling the issue, I found the answer on [stackoverflow](https://stackoverflow.com/questions/54834970/system-invalidoperationexception-an-attempt-was-made-to-use-the-context-while-i). The crucial message is as follows.
+
+* Scoped services aren't directly or indirectly injected into singletons.
+
+
+
+\-﻿-------------------------------------
 
 The project is structured using a layered architecture based on the Controller-Service-Repository pattern. There is a Member table and a ChangeLog table. When certain properties of a Member are updated, the relevant fields are serialized and stored as a record in the ChangeLog table. Since ChangeLog is designed to track changes for multiple types of entities, it includes EntityId and EntityType fields to distinguish the source of each change. To simplify the explanation, the service interfaces are omitted here. Although the dependency injection code may differ, it would lead to the same issue.
 
@@ -76,53 +86,54 @@ classDiagram
         -_changeLogService : ChangeLogService
     }
 
-    class MemberService {
-        +UpdateMember(MemberDto dto)
-        -_dbContext : LifeTimeDbContext
-    }
+```
+class MemberService {
+    +UpdateMember(MemberDto dto)
+    -_dbContext : LifeTimeDbContext
+}
 
-    class ChangeLogService {
-        +LogChange(MemberDto dto)
-        -_dbContext : LifeTimeDbContext
-    }
+class ChangeLogService {
+    +LogChange(MemberDto dto)
+    -_dbContext : LifeTimeDbContext
+}
 
-    class MemberDto {
-        +Id : int
-        +Name : string
-        +Email : string
-    }
+class MemberDto {
+    +Id : int
+    +Name : string
+    +Email : string
+}
 
-    class LifeTimeDbContext {
-        +Members : DbSet<Member>
-        +ChangeLogs : DbSet<ChangeLog>
-    }
+class LifeTimeDbContext {
+    +Members : DbSet<Member>
+    +ChangeLogs : DbSet<ChangeLog>
+}
 
-    class Member {
-        +Id : int
-        +Name : string
-        +Email : string
-    }
+class Member {
+    +Id : int
+    +Name : string
+    +Email : string
+}
 
-    class ChangeLog {
-        +Id : int
-        +EntityId : int
-        +EntityType : string
-        +ChangedData : string
-        +ChangedAt : DateTime
-    }
+class ChangeLog {
+    +Id : int
+    +EntityId : int
+    +EntityType : string
+    +ChangedData : string
+    +ChangedAt : DateTime
+}
 
-    MemberController --> MemberService : uses
-    MemberController --> ChangeLogService : uses
-    MemberController --> MemberDto : accepts
-    MemberService --> MemberDto : uses
-    ChangeLogService --> MemberDto : uses
-    MemberService --> LifeTimeDbContext : injects
-    ChangeLogService --> LifeTimeDbContext : injects
-    LifeTimeDbContext --> Member : manages
-    LifeTimeDbContext --> ChangeLog : manages
+MemberController --> MemberService : uses
+MemberController --> ChangeLogService : uses
+MemberController --> MemberDto : accepts
+MemberService --> MemberDto : uses
+ChangeLogService --> MemberDto : uses
+MemberService --> LifeTimeDbContext : injects
+ChangeLogService --> LifeTimeDbContext : injects
+LifeTimeDbContext --> Member : manages
+LifeTimeDbContext --> ChangeLog : manages
+```
 
 </div>
-
 
 <div class="mermaid">
 erDiagram
@@ -133,14 +144,16 @@ erDiagram
         datetime UpdatedAt
     }
 
-    CHANGELOG {
-        int Id PK
-        int EntityId
-        string EntityType
-        string ChangedData
-        datetime ChangedAt
-    }
+```
+CHANGELOG {
+    int Id PK
+    int EntityId
+    string EntityType
+    string ChangedData
+    datetime ChangedAt
+}
 
-    MEMBER ||--o{ CHANGELOG : logs
+MEMBER ||--o{ CHANGELOG : logs
+```
 
 </div>
