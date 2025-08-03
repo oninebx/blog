@@ -1,5 +1,5 @@
 ---
-title: Lost Updates and Broken Transactions from Incorrect DI Lifecycle
+title: "From Confusion to Clarity: Resolving Scoped and Singleton Injection Conflicts"
 date: 2025-08-01T10:12:00.595Z
 toc: true
 categories:
@@ -8,6 +8,7 @@ tags:
   - Entity Framework
   - ASP.NET
   - C#
+  - Code Refactoring
 ---
 I resolved a subtle issue months ago in a long-running company project that caused business data inconsistency due to confusing code changes. The project used an old .NET version where this issue could still occur — something newer versions have since addressed.
 
@@ -62,9 +63,9 @@ The inconsistency is that, despite injecting CoreDbContext via the constructor, 
   ...
 ```
 
-Obviously, the simplified code is easier to understand, but it throws an exception at runtime.
+The simplified code is easier to understand, but it will throw exceptions at runtime when multiple concurrent requests of the same type occur.
 
-![exception]({{ "uploads/broken-transaction-exception.png" | relative_url }})
+***InvalidOperationException: An attempt was made to use the model while it was being created. A DbContext instance cannot be used inside 'OnModelCreating' in any way that makes use of the model that is being created.***
 
 ## Mistrust of the running code
 
@@ -72,88 +73,32 @@ After googling the issue, I found the answer on [stackoverflow](https://stackove
 
 * Scoped services aren't directly or indirectly injected into singletons.
 
+Then I came across another piece of code that puzzled me, as shown below.
 
-
-\-﻿-------------------------------------
-
-The project is structured using a layered architecture based on the Controller-Service-Repository pattern. There is a Member table and a ChangeLog table. When certain properties of a Member are updated, the relevant fields are serialized and stored as a record in the ChangeLog table. Since ChangeLog is designed to track changes for multiple types of entities, it includes EntityId and EntityType fields to distinguish the source of each change. To simplify the explanation, the service interfaces are omitted here. Although the dependency injection code may differ, it would lead to the same issue.
-
-<div class="mermaid">
-classDiagram
-    class MemberController {
-        +Update(MemberDto dto)
-        -_memberService : MemberService
-        -_changeLogService : ChangeLogService
-    }
-
-```
-class MemberService {
-    +UpdateMember(MemberDto dto)
-    -_dbContext : LifeTimeDbContext
-}
-
-class ChangeLogService {
-    +LogChange(MemberDto dto)
-    -_dbContext : LifeTimeDbContext
-}
-
-class MemberDto {
-    +Id : int
-    +Name : string
-    +Email : string
-}
-
-class LifeTimeDbContext {
-    +Members : DbSet<Member>
-    +ChangeLogs : DbSet<ChangeLog>
-}
-
-class Member {
-    +Id : int
-    +Name : string
-    +Email : string
-}
-
-class ChangeLog {
-    +Id : int
-    +EntityId : int
-    +EntityType : string
-    +ChangedData : string
-    +ChangedAt : DateTime
-}
-
-MemberController --> MemberService : uses
-MemberController --> ChangeLogService : uses
-MemberController --> MemberDto : accepts
-MemberService --> MemberDto : uses
-ChangeLogService --> MemberDto : uses
-MemberService --> LifeTimeDbContext : injects
-ChangeLogService --> LifeTimeDbContext : injects
-LifeTimeDbContext --> Member : manages
-LifeTimeDbContext --> ChangeLog : manages
+```csharp
+  ...
+  services.AddDbContextPool<CoreDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("Core")));
+  ...
+   services.AddSingleton<IMemberService, MemberService>();
+   services.AddSingleton<IAuditService, AuditService>();
+  ...
 ```
 
-</div>
+This piece of code was written in the early stages of the project, so no one questioned or modified it. As a result, when new service instances were injected, they followed this default convention. Consequently, many services and repositories in the project were registered with a Singleton lifetime.  At that moment, I began to question the validity of the old code and became curious about whether mixing dependencies with different lifetimes in dependency injection was a good approach.
 
-<div class="mermaid">
-erDiagram
-    MEMBER {
-        int Id PK
-        string Name
-        string Email
-        datetime UpdatedAt
-    }
+## Understanding the Problem and How to Fix It Right
+
+`CoreDbContext` is registered with a scoped lifetime using `AddDbContextPool`, but instances of this type are injected into services like `MemberService` and `AuditService`, which are registered with a singleton lifetime. This kind of injection has been prohibited since .NET Core 3.0 and will result in a compile-time error. Unfortunately, our project is built on .NET Core 2.2, which does not perform dependency injection lifetime conflict checks at compile time.
+
+The developer who implement the `AuditService` was unaware of the implications of injecting a scoped service into a singleton. Instead of addressing the root issue, they worked around it with two questionable code patterns—explicitly passing a scoped `CoreDbContext` into each `Record` method, thereby sidestepping the injection conflict.
+
+
+
+Based on the above analysis, when I registered `MemberService` and `AuditService` with a scoped lifetime, the exception magically disappeared. 
 
 ```
-CHANGELOG {
-    int Id PK
-    int EntityId
-    string EntityType
-    string ChangedData
-    datetime ChangedAt
-}
-
-MEMBER ||--o{ CHANGELOG : logs
+...
+   services.AddScoped<IMemberService, MemberService>();
+   services.AddScoped<IAuditService, AuditService>();
+  ...
 ```
-
-</div>
