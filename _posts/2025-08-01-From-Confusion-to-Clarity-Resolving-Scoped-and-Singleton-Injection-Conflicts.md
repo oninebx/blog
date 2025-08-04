@@ -92,8 +92,6 @@ This piece of code was written in the early stages of the project, so no one que
 
 The developer who implement the `AuditService` was unaware of the implications of injecting a scoped service into a singleton. Instead of addressing the root issue, they worked around it with two questionable code patterns—explicitly passing a scoped `CoreDbContext` into each `Record` method, thereby sidestepping the injection conflict.
 
-
-
 Based on the above analysis, when I registered `MemberService` and `AuditService` with a scoped lifetime, the exception magically disappeared. 
 
 ```
@@ -101,4 +99,18 @@ Based on the above analysis, when I registered `MemberService` and `AuditService
    services.AddScoped<IMemberService, MemberService>();
    services.AddScoped<IAuditService, AuditService>();
   ...
+```
+
+### Protect the code from being polluted
+
+.NET provides configuration options to enforce validation of dependency injection lifetimes at build time. To prevent developers from introducing improper dependencies, we added the following code to our project. Of course, this option is enabled by default in versions 3.0 and later.
+
+```csharp
+// Program.cs
+
+builder.Host.UseDefaultServiceProvider(options =>
+{
+    options.ValidateScopes = true;
+    options.ValidateOnBuild = true;
+});
 ```
