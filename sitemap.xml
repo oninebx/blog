@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+    xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+       http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+>
+
+<url>
+ <loc>https://oninebx.github.io/blog</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/categories/project-notes</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/categories/architecture</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/categories/嘀嘀嗒嗒</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/asp-net</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/c</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/code-refactoring</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/debugging</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/entity-framework</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/javascript</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/linq</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/query-optimization</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/system-design</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/t-sql</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/tags/杂感</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/2025</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/architecture/thinking-in-ddd-applying-ubiquitous-language-to-real-world-financial-workflows</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/project%20notes/From-Confusion-to-Clarity-Resolving-Scoped-and-Singleton-Injection-Conflicts</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/architecture/thinking-in-ddd-a-case-of-moving-from-code-first-to-domain-driven</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/project%20notes/improving-sql-performance-by-choosing-the-right-driving-table</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/page2</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+<url>
+ <loc>https://oninebx.github.io/blog/feed.xml</loc>
+ <priority>0.3</priority>
+ <lastmod>2025-08-09</lastmod>
+ <changefreq>weekly</changefreq>
+</url>
+
+</urlset>
