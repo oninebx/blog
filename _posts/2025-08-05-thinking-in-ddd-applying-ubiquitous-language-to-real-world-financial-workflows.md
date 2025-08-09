@@ -27,6 +27,7 @@ This requirement is straightforward: automate the creation of invoices for donat
 Eric Evans introduced the explanatory model concept to succinctly represent domain knowledge. Below is the explanatory model for this requirement.
 
 <div class="mermaid">
+flowchart TD
 A[Donation Creation] --> B[Payment Processing]
     B --> C[Reconciliation]
     C --> D[Payouts and Accounting]
