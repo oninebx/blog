@@ -12,7 +12,7 @@ Software engineers need domain knowledge to build business systems. I’ve found
 
 Ubiquitous Language is the starting point of that path.
 
-##  Essentials﻿ in Ubiquitous Language
+## Essentials﻿ in Ubiquitous Language
 
 *Ubiquitous Language* is a familiar concept to many engineers. While I first encountered it in Eric Evans’ book, in practice, every team I’ve worked with has naturally used it to communicate. *Ubiquitous Language* can be seen as a **shared, precise vocabulary** developed and continuously refined by both domain experts and developers, **centered around the domain model**, and **consistently used in all team communication and code** to ensure clarity, alignment, and deep understanding of the business domain.
 
@@ -22,4 +22,43 @@ Earlier this year, I worked on a project in the finance domain and went through 
 
 ## Business-stated requirement
 
-Customer service staff pay out the reconciled donation payment to the beneficiaries at regular intervals.
+This requirement is straightforward: automate the creation of invoices for donation payments to reduce manual effort. However, without financial knowledge, understanding and assimilating this requirement is not straightforward. After multiple discussions with colleagues familiar with the process, I have gained a general understanding of the necessary domain knowledge, which is crucial for working with the existing code and conducting local testing during development.
+
+<﻿div class="mermaid">
+A[Donation Creation] --> B[Payment Processing]
+    B --> C[Reconciliation]
+    C --> D[Payouts and Accounting]
+
+    %% Remarks linked to each node as rounded rectangles
+    A_remark([Donation Record Created])
+    B_remark([DPS File Generated])
+    C_remark([Reconciliation Report])
+    D_remark([Invoices Created])
+
+    %% System names as ellipses
+    A_sys((GAL))
+    B_sys((Windcave))
+    C_sys((GAL))
+    D_sys((Xero))
+
+    %% Link remarks to main nodes with dashed lines
+    A -.-> A_remark
+    B -.-> B_remark
+    C -.-> C_remark
+    D -.-> D_remark
+
+    %% Link remarks to systems with dashed lines
+    A_remark -.-> A_sys
+    B_remark -.-> B_sys
+    C_remark -.-> C_sys
+    D_remark -.-> D_sys
+
+    %% Styling for remarks and system nodes
+    classDef remarkNode fill:#f9f,stroke:#333,stroke-dasharray: 4 2,color:#333,font-style:italic;
+    classDef systemNode fill:#bbf,stroke:#33f,color:#004,font-weight:bold;
+    classDef docButton fill:#4CAF50,stroke:#2E7D32,color:#fff,font-weight:bold,stroke-width:2,rx:8,ry:8,cursor:pointer;
+
+    class A_remark,C_remark remarkNode;
+    class B_remark,D_remark docButton;
+    class A_sys,B_sys,C_sys,D_sys systemNode;
+<﻿/div>
