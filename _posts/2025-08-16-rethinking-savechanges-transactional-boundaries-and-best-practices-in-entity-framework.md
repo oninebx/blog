@@ -195,6 +195,9 @@ protected override async Task ExecuteAsync(CancellationToken stoppingToken)
 }
 ```
 
+Now, all related operations occur within the same transaction, while business logic and logging are decoupled, making the code more robust.
+
 ## Conclusion
 
 Calling SaveChangesAsync in service layers can lead to multiple transactions, increased latency, and potential inconsistencies, especially with multiple databases. Using a Unit of Work pattern centralizes persistence and ensures atomic operations, while the Outbox pattern with a background worker handles separate databases reliably. This approach maintains data consistency, improves performance, and aligns with best practices for enterprise applications.
+Although distributed transactions could also ensure consistency across multiple databases, they come with significant drawbacks: increased latency, added complexity, reduced availability, and limited scalability. The details of this approach will not be elaborated here.
