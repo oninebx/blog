@@ -3,7 +3,7 @@ title: Pitfalls of Using ref Variables in LINQ Select with Multiple Enumerations
 date: 2025-07-14T13:23:08.043Z
 toc: true
 categories:
-  - Project Notes
+  - Project-Notes
 tags:
   - LINQ
   - C#
