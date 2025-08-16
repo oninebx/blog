@@ -3,7 +3,7 @@ title: "From Confusion to Clarity: Resolving Scoped and Singleton Injection Conf
 date: 2025-08-01T10:12:00.595Z
 toc: true
 categories:
-  - Project-Notes
+  - Project Notes
 tags:
   - Entity Framework
   - ASP.NET
