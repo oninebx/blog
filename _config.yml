@@ -22,8 +22,8 @@ title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Ryan Xu"
 description              : "Debugging code, logging life."
-url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
-baseurl                  : # the subpath of your site, e.g. "/blog"
+url                      : https://oninebx.github.io # the base hostname & protocol for your site e.g.
+baseurl                  : /blog # the subpath of your site, e.g. "/blog"
 repository               : # GitHub username/repo-name e.g. "mmistakes/minimal-mistakes"
 teaser                   : # path of fallback teaser image, e.g. "/assets/images/500x300.png"
 logo                     : # path of logo image to display in the masthead, e.g. "/assets/images/88x88.png"
@@ -82,7 +82,7 @@ google:
   search_engine_id       : # YOUR_SEARCH_ENGINE_ID
   instant_search         : # false (default), true
 # SEO Related
-google_site_verification :
+google_site_verification : sF4YRwxkS5JoO9Vbswj4YD-Xd9R_BYKhylrktflqayw
 bing_site_verification   :
 naver_site_verification  :
 yandex_site_verification :
