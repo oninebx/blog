@@ -3,7 +3,7 @@ title: Streaming Progress Updates in Long-Running ASP.NET Core Requests
 date: 2025-07-13T07:35:18.928Z
 toc: true
 categories:
-  - Project-Notes
+  - Project Notes
 tags:
   - ASP.NET
   - C#

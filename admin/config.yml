@@ -25,7 +25,7 @@ collections:
         options:
           - "Frontend"
           - "Backend"
-          - "Project-Notes"
+          - "Project Notes"
           - "Code Debugging"
           - "Performance"
           - "Architecture"
