@@ -117,7 +117,7 @@ When selecting primary keys, it is important to balance the trade-off between pa
 
 ## Key takeaways
 
-Here's an [experimental script]({{ "uploads/PageTestExperiment.sql" | relative_url }}) to demonstrate the page splitting caused by random primary keys and the hot page contention problem with sequential primary keys. Please use [SQLQueryStress](https://github.com/ErikEJ/SqlQueryStress) to execute the script concurrently.
+Here's an [experimental script]({{ "uploads/PageTestExperiment.sql" | relative_url }}) to demonstrate the page splitting caused by random primary keys and the hot page contention problem with sequential primary keys. Please use [SQLQueryStress](https://github.com/ErikEJ/SqlQueryStress){:target="_blank"}  to execute the script concurrently.
 
 ### Sequential Primary Key test results
 
