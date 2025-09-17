@@ -85,7 +85,9 @@ Here, ‘Context’ refers to a Bounded Context—a way to simplify modeling in 
 
 ### E﻿ntities
 
-* **Page**: The Page itself is the aggregate root. It encapsulates the campaign’s lifecycle, enforces business rules, and anchors relationships with other objects. 
-* **Donation**: Represents financial contributions from supporters, capturing donor, amount, and time of donation.
-* **Comment**: Records feedback or encouragement from supporters, linked to the campaign and its author.
-* **Beneficiary**: The recipient of the funds, which may differ from the Page owner.
+An **Entity** is a domain object defined by its unique identity rather than its attributes. It can have mutable state and encapsulate business rules that govern its lifecycle and interactions with related objects. Entities often aggregate or reference other entities and value objects, ensuring consistency within their boundaries.
+
+* **Page**: Page is an Entity because it has a persistent identity and mutable state, and it is the **aggregate root** because it encapsulates the campaign’s lifecycle, enforces business rules, and anchors all related entities and value objects, providing a clear and consistent transactional boundary for the crowdfunding campaign.
+* **Donation**: Donation is an Entity because each contribution has a unique identity, a lifecycle like created, processed, and potentially refunded or canceled, and enforces business rules like valid donor and positive amounts. It maintains relationships with its Page and Donor, allowing the system to track and manage each donation consistently.
+* **Comment**: Comment is an Entity because each comment has a unique identity that distinguishes it from all other comments, even if multiple comments have the same content, author, or timestamp. Its identity ensures that the system can track, reference, or manage each comment individually.
+* **Beneficiary**: Beneficiary is an Entity because it has a persistent identity, a mutable lifecycle, and relationships with Pages and Donations. Its identity ensures that funds are accurately tracked, business rules are enforced, and accountability is maintained, even when multiple beneficiaries have similar attributes.
