@@ -42,41 +42,52 @@ classDiagram
         +Date EndDate
     }
 
-    %% Relevant objects
-    class Donation {
-        +decimal Amount
-        +Date DonateAt
-        +string Message
-    }
+```
+%% Relevant objects
+class Donation {
+    +decimal Amount
+    +Date DonateAt
+    +string Message
+}
 
-    class Comment {
-        +string Content
-        +Date CreatedAt
-    }
+class Comment {
+    +string Content
+    +Date CreatedAt
+}
 
-    class Profile {
-        +string Name
-        +string Email
-    }
-
-
-    class Beneficiary {
-        +string Name
-        +string ContactInfo
-    }
+class Profile {
+    +string Name
+    +string Email
+}
 
 
-    %% Relationships
-    Page "1" --> "0..*" Donation : receives
-    Donation "0..*" --> "1" Profile : donor
+class Beneficiary {
+    +string Name
+    +string ContactInfo
+}
 
-    Page "1" --> "0..*" Comment : receives
-    Comment "0..*" --> "1" Profile : author
 
-    Page "0..*" --> "1" Profile : Owned by
+%% Relationships
+Page "1" --> "0..*" Donation : receives
+Donation "0..*" --> "1" Profile : donor
 
-    Page "1" --> "1..*" Beneficiary : benefits
-   
-   
+Page "1" --> "0..*" Comment : receives
+Comment "0..*" --> "1" Profile : author
+
+Page "0..*" --> "1" Profile : Owned by
+
+Page "1" --> "1..*" Beneficiary : benefits
+```
+
 </div>
 
+## The Domain Objects in Page Context
+
+Here, ‘Context’ refers to a Bounded Context—a way to simplify modeling in complex systems. We’ll temporarily call it ‘Page’. The name may not capture the core business, but it shows that this part is related to ‘Page’.
+
+### E﻿ntities
+
+* **Page**: The Page itself is the aggregate root. It encapsulates the campaign’s lifecycle, enforces business rules, and anchors relationships with other objects. 
+* **Donation**: Represents financial contributions from supporters, capturing donor, amount, and time of donation.
+* **Comment**: Records feedback or encouragement from supporters, linked to the campaign and its author.
+* **Beneficiary**: The recipient of the funds, which may differ from the Page owner.
