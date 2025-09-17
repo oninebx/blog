@@ -38,13 +38,14 @@ classDiagram
         +decimal TargetAmount
         +decimal RaisedAmount
         +PageStatus Status
+        +Date StartDate
         +Date EndDate
     }
 
     %% Relevant objects
     class Donation {
         +decimal Amount
-        +Date DonationDate
+        +Date DonateAt
         +string Message
     }
 
@@ -64,14 +65,6 @@ classDiagram
         +string ContactInfo
     }
 
-    class PageStatus {
-        <<enumeration>>
-        Draft
-        Published
-        Blocked
-        Closed
-    }
-
     %% Relationships
     Page "1" --> "0..*" Donation : receives
     Donation "0..*" --> "1" Profile : donor
@@ -82,7 +75,6 @@ classDiagram
     Page "0..*" --> "1" Profile : Owned by
 
     Page "1" --> "1..*" Beneficiary : benefits
-    Page "1" --> "1" PageStatus : is in
    
 </div>
 
