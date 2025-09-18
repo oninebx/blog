@@ -97,8 +97,8 @@ An **Entity** is a domain object defined by its unique identity rather than its 
 Value Objects (VOs) are immutable and defined by their values. They capture domain concepts precisely, enforce rules at creation, and make the system safer and easier to understand. By handling details, they let Entities focus on behavior while improving clarity and reliability in the domain model.
 
 * **C﻿ampaignStory**: Encapsulate a campaign’s narrative - its purpose, goals, and presentation. It includes Title, Content, Summary, and ImageUrl, each with validation rules (e.g., `Title` is required and limited to 50 characters).
-* **Timeline**: Represent the start and end dates of a fundraising campaign. It encapsulates the campaign’s duration and enforces business rules, such as the start date must precede the end date, the campaign cannot end in the past, and optional constraints like minimum and maximum campaign lengths. By modeling timeline as a VO, the campaign’s temporal boundaries are clearly defined and consistently validated across the system.
-* **DonationA﻿mount**: Encapsulates the value of a donation, enforces campaign-specific limits, and calculates fees based on the chosen payment method. It ensures each donation respects the Page’s minimum and maximum constraints, remains positive, and applies the correct payment fees, providing a consistent and validated representation of a supporter’s contribution.
+* **Timeline**: Represent the start and end dates of a fundraising campaign. It encapsulates the campaign’s duration and enforces business rules, such as the start date must precede the end date, and the campaign cannot end in the past. 
+* **DonationAmount**: Represents the value of a donation and encapsulates the logic to compute its total amount. It combines the supporter’s base donation, platform fees, and payment method fees (e.g., credit card), with the sum representing the total amount the supporter actually pays.
 
 The identification and extraction of Value Objects (VOs) is an ongoing, iterative process, and the results may vary between individuals and over time. Regardless, we should keep in mind that the purpose of defining VOs is to express rich business rules in the domain model in a clear and understandable way. A VO does not necessarily need multiple attributes - it can consist of just one - as long as the business rules it encapsulates are significant enough to warrant extraction and encapsulation.
 
@@ -110,7 +110,7 @@ In the Page aggregate of a crowdfunding platform, **only the Page itself serves 
 
 ### F﻿actories
 
-In Domain-Driven Design, a **Factory** is a pattern used to encapsulate the complex creation logic of domain objects, particularly entities and aggregates. Instead of exposing constructors directly, a factory handles the assembly of an object’s required components, ensures that all business rules and invariants are satisfied at creation, and can coordinate the creation of related entities or value objects. Factories are especially useful when creating aggregates like a Page, where multiple entities (Donations, Comments, Beneficiary) and value objects (CampaignStory, Timeline) must be initialized consistently and correctly from the start.
+**Factory** is a pattern used to encapsulate the complex creation logic of domain objects, particularly entities and aggregates. Instead of exposing constructors directly, a factory handles the assembly of an object’s required components, ensures that all business rules and invariants are satisfied at creation, and can coordinate the creation of related entities or value objects. Factories are especially useful when creating aggregates like a Page, where multiple entities (Donations, Comments, Beneficiary) and value objects (CampaignStory, Timeline) must be initialized consistently and correctly from the start.
 
 #### P﻿ageFactory
 
