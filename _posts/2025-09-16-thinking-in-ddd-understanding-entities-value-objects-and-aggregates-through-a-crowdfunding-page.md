@@ -42,7 +42,6 @@ classDiagram
         +Date EndDate
     }
 
-```
 %% Relevant objects
 class Donation {
     +decimal Amount
@@ -60,12 +59,10 @@ class Profile {
     +string Email
 }
 
-
 class Beneficiary {
     +string Name
     +string ContactInfo
 }
-
 
 %% Relationships
 Page "1" --> "0..*" Donation : receives
@@ -77,9 +74,10 @@ Comment "0..*" --> "1" Profile : author
 Page "0..*" --> "1" Profile : Owned by
 
 Page "1" --> "1..*" Beneficiary : benefits
-```
 
 </div>
+
+The diagram above illustrates the structure of Page, which can be used directly as the classes in the project, though it does not fully reflect the domain knowledge.
 
 ## The Domain Objects in Page Context
 
@@ -93,3 +91,43 @@ An **Entity** is a domain object defined by its unique identity rather than its 
 * **Donation**: Donation is an Entity because each contribution has a unique identity, a lifecycle like created, processed, and potentially refunded or canceled, and enforces business rules like valid donor and positive amounts. It maintains relationships with its Page and Donor, allowing the system to track and manage each donation consistently.
 * **Comment**: Comment is an Entity because each comment has a unique identity that distinguishes it from all other comments, even if multiple comments have the same content, author, or timestamp. Its identity ensures that the system can track, reference, or manage each comment individually.
 * **Beneficiary**: Beneficiary is an Entity because it has a persistent identity, a mutable lifecycle, and relationships with Pages and Donations. Its identity ensures that funds are accurately tracked, business rules are enforced, and accountability is maintained, even when multiple beneficiaries have similar attributes.
+
+### V﻿alue Objects
+
+Value Objects (VOs) are immutable and defined by their values. They capture domain concepts precisely, enforce rules at creation, and make the system safer and easier to understand. By handling details, they let Entities focus on behavior while improving clarity and reliability in the domain model.
+
+* **C﻿ampaignStory**: Encapsulate a campaign’s narrative - its purpose, goals, and presentation. It includes Title, Content, Summary, and ImageUrl, each with validation rules (e.g., `Title` is required and limited to 50 characters).
+* **Timeline**: Represent the start and end dates of a fundraising campaign. It encapsulates the campaign’s duration and enforces business rules, such as the start date must precede the end date, the campaign cannot end in the past, and optional constraints like minimum and maximum campaign lengths. By modeling timeline as a VO, the campaign’s temporal boundaries are clearly defined and consistently validated across the system.
+* **DonationA﻿mount**: Encapsulates the value of a donation, enforces campaign-specific limits, and calculates fees based on the chosen payment method. It ensures each donation respects the Page’s minimum and maximum constraints, remains positive, and applies the correct payment fees, providing a consistent and validated representation of a supporter’s contribution.
+
+The identification and extraction of Value Objects (VOs) is an ongoing, iterative process, and the results may vary between individuals and over time. Regardless, we should keep in mind that the purpose of defining VOs is to express rich business rules in the domain model in a clear and understandable way. A VO does not necessarily need multiple attributes - it can consist of just one - as long as the business rules it encapsulates are significant enough to warrant extraction and encapsulation.
+
+### A﻿ggregate & Aggregate Root
+
+An **Aggregate** is a cluster of related entities and value objects that are treated as a single unit to enforce business rules and maintain consistency. The **Aggregate Root** is the primary entity within the aggregate that controls access to its internal objects, ensuring all invariants are preserved. External objects interact only with the aggregate root, which acts as a gatekeeper, coordinating changes and protecting the integrity of the aggregate’s state.
+
+In the Page aggregate of a crowdfunding platform, **only the Page itself serves as the Aggregate Root**. Other entities, such as **Donation**, **Comment**, or **Beneficiary**, cannot act as aggregate roots because they do not have the full knowledge or authority to enforce the aggregate’s business rules on their own. For example, a Donation cannot independently ensure that the total raised amount does not exceed the campaign’s target, and a Comment cannot verify the Page’s status before being added. Only the Page has visibility and control over all related entities and value objects, allowing it to enforce invariants, coordinate changes, and maintain the integrity of the entire campaign. This ensures that all operations pass through a single gatekeeper, preventing inconsistencies and preserving the aggregate’s transactional boundaries.
+
+### F﻿actories
+
+In Domain-Driven Design, a **Factory** is a pattern used to encapsulate the complex creation logic of domain objects, particularly entities and aggregates. Instead of exposing constructors directly, a factory handles the assembly of an object’s required components, ensures that all business rules and invariants are satisfied at creation, and can coordinate the creation of related entities or value objects. Factories are especially useful when creating aggregates like a Page, where multiple entities (Donations, Comments, Beneficiary) and value objects (CampaignStory, Timeline) must be initialized consistently and correctly from the start.
+
+#### P﻿ageFactory
+
+A **PageFactory** is essential because Pages of different types— like **Cause**, **Project**, and **Fundraiser**—have distinct business rules and initialization requirements. For example, a Cause page allows an arbitrary `TargetAmount`, whereas a Project page requires a fixed `TargetAmount`. A Fundraiser page, on the other hand, coordinates multiple Cause pages, establishing relationships between them and managing the aggregated fundraising logic. By centralizing all type-specific creation logic and associated business rules within the factory, the system ensures that each Page is initialized correctly, all invariants are satisfied, and related entities or value objects are properly set up. This consolidation of creation logic not only guarantees consistency but also improves code readability and maintainability, as developers can understand the rules for creating any Page in one place.
+
+#### D﻿onationFactory
+
+A **DonationFactory** is also essential in a robust crowdfunding ecosystem because creating a Donation involves multiple sources and complex business rules. Donations may come from one-time contributions, **Regular Giving**, or **Payroll Giving**, and each source may have distinct processing requirements. Additionally, different **payment methods** apply varying fee rates, and each Page can enforce specific minimum and maximum donation amounts. By encapsulating all these rules within a factory, the system ensures that every Donation is created consistently, respects limits, calculates fees accurately, and maintains the integrity of the Page aggregate. In a real system, the rules around creating a Donation are more complex, so it is fully justified to introduce a factory for Donation.
+
+### ﻿Repositories
+
+**Repository** abstracts persistence and provides access to aggregates as if they were in-memory collections. They operate only at the **aggregate root level**, ensuring boundaries and business rules are preserved. While **Factories** handle the creation of complex aggregates, **Repositories** take responsibility for retrieving and storing them. Together, they keep the domain model clean and focused on business logic, free from infrastructure concerns.
+
+**Page** is the only aggregate root, so the **PageRepository** is the single gateway for persistence. It provides simple access to Page aggregates—retrieving, saving, or removing them—while hiding database details. A Page is always handled as a whole, including its Donations, Comments, and Beneficiary, ensuring business rules are enforced through the aggregate root.
+
+When implementing repositories, it is a common practice to define a generic base class that encapsulates common query operations. This approach reduces boilerplate code, promotes consistency across repositories, and allows developers to focus on aggregate-specific logic rather than repeating infrastructure concerns.
+
+### D﻿omain Services
+
+**Domain Service** encapsulates business logic that doesn’t naturally belong to a single Entity or Value Object. It is stateless, operates on the domain model, and handles behavior that may span multiple aggregates, keeping complex rules within the domain layer.
