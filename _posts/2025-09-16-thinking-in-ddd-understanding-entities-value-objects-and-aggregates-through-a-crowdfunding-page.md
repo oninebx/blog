@@ -156,3 +156,19 @@ classDiagram
 </div>
 
 ## Conclusion
+
+Effectively modeling a domain around its business rules is at the heart of Domain-Driven Design. Before learning DDD, I used the six common modeling constructs in projects but rarely defined them properly:
+
+* Services were created arbitrarily
+
+* Entities were treated merely as data holders
+
+* Value objects were barely used
+
+* Aggregates were not designed
+
+* Repositories did not align with aggregates
+
+As a result, the models grew bloated, lost their boundaries, and the code no longer reflected the domain, making it difficult for the team to grasp the domain knowledge and business logic efficiently.
+
+By analyzing the Page concept in the crowdfunding domain and identifying the essential modeling objects, I gained deeper insights into domain modeling. This article draws on Chapters 5–7 of Domain-Driven Design: Tackling Complexity in the Heart of Software, and I hope this case study proves useful if you are exploring the book as well.
