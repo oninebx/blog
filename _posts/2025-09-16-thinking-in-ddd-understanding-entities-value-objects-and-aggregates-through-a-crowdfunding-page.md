@@ -82,7 +82,7 @@ The diagram above illustrates the structure of Page, which can be used directly 
 
 Here, ‘Context’ refers to a Bounded Context—a way to simplify modeling in complex systems. We’ll temporarily call it ‘Page’. The name may not capture the core business, but it shows that this part is related to ‘Page’.
 
-### E﻿ntities
+### Entities
 
 An **Entity** is a domain object defined by its unique identity rather than its attributes. It can have mutable state and encapsulate business rules that govern its lifecycle and interactions with related objects. Entities often aggregate or reference other entities and value objects, ensuring consistency within their boundaries.
 
@@ -111,15 +111,15 @@ In the Page aggregate of a crowdfunding platform, **only the Page itself serves 
 
 **Factory** is a pattern used to encapsulate the complex creation logic of domain objects, particularly entities and aggregates. Instead of exposing constructors directly, a factory handles the assembly of an object’s required components, ensures that all business rules and invariants are satisfied at creation, and can coordinate the creation of related entities or value objects. Factories are especially useful when creating aggregates like a Page, where multiple entities (Donations, Comments, Beneficiary) and value objects (CampaignStory, Timeline) must be initialized consistently and correctly from the start.
 
-#### P﻿ageFactory
+#### PageFactory
 
 A **PageFactory** is essential because Pages of different types— like **Cause**, **Project**, and **Fundraiser**—have distinct business rules and initialization requirements. For example, a Cause page allows an arbitrary `TargetAmount`, whereas a Project page requires a fixed `TargetAmount`. A Fundraiser page, on the other hand, coordinates multiple Cause pages, establishing relationships between them and managing the aggregated fundraising logic. By centralizing all type-specific creation logic and associated business rules within the factory, the system ensures that each Page is initialized correctly, all invariants are satisfied, and related entities or value objects are properly set up. This consolidation of creation logic not only guarantees consistency but also improves code readability and maintainability, as developers can understand the rules for creating any Page in one place.
 
-#### D﻿onationFactory
+#### DonationFactory
 
 A **DonationFactory** is also essential in a robust crowdfunding ecosystem because creating a Donation involves multiple sources and complex business rules. Donations may come from one-time contributions, **Regular Giving**, or **Payroll Giving**, and each source may have distinct processing requirements. Additionally, different **payment methods** apply varying fee rates, and each Page can enforce specific minimum and maximum donation amounts. By encapsulating all these rules within a factory, the system ensures that every Donation is created consistently, respects limits, calculates fees accurately, and maintains the integrity of the Page aggregate. In a real system, the rules around creating a Donation are more complex, so it is fully justified to introduce a factory for Donation.
 
-### ﻿Repositories
+### Repositories
 
 **Repository** abstracts persistence and provides access to aggregates as if they were in-memory collections. They operate only at the **aggregate root level**, ensuring boundaries and business rules are preserved. While **Factories** handle the creation of complex aggregates, **Repositories** take responsibility for retrieving and storing them. Together, they keep the domain model clean and focused on business logic, free from infrastructure concerns.
 
@@ -127,6 +127,31 @@ A **DonationFactory** is also essential in a robust crowdfunding ecosystem becau
 
 When implementing repositories, it is a common practice to define a generic base class that encapsulates common query operations. This approach reduces boilerplate code, promotes consistency across repositories, and allows developers to focus on aggregate-specific logic rather than repeating infrastructure concerns.
 
-### D﻿omain Services
+### Domain Services
 
 **Domain Service** encapsulates business logic that doesn’t naturally belong to a single Entity or Value Object. It is stateless, operates on the domain model, and handles behavior that may span multiple aggregates, keeping complex rules within the domain layer.
+
+In this aggregate, Page and Donation serve as core entities. Given the complexity of the business rules governing their interactions, it is appropriate to introduce a Domain Service to encapsulate and manage this logic. 
+
+Below, we outline several business rules concerning the two entities; however, in practice, the rules and interactions are significantly more complex.
+
+* **Donation Validation**:The donation amount must respect the associated Page’s `DonationLimit`, like Page's minimum and maximum constraints, remain positive, and so on.
+* **Fee Calculation**: Fees are applied according to the chosen payment method.
+* **Aggregate Updates**: The `Donation` entity must be recorded. The Page’s `RaisedAmount` must be updated to reflect the new donation.
+
+This class is named `DonationProcessingService`. The diagram below illustrates one possible structure, in which `ProcessDonation` serves as the sole public method exposed externally.
+
+<div class="mermaid">
+
+classDiagram
+    class DonationProcessingService {
+        +ProcessDonation(Page page, Donation donation) 
+        -ValidateDonationAmount(Donation donation, DonationLimit limit)
+        -CalculateFee(Donation donation)
+        -UpdateRaisedAmount(Page page, Donation donation) 
+        -RecordDonation(Page page, Donation donation)
+    }
+
+</div>
+
+## Conclusion
