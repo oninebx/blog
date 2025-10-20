@@ -32,40 +32,41 @@ Eric Evans introduced the concept of Domain Event when explaining Domain-Driven 
 
 The diagram below illustrates the event-driven Assessment Mechanism I designed. I will now explain how it fulfills the purposes mentioned earlier.
 
-
 <div class="mermaid">
 graph TD
 
-    %% Events
-    Event1[Event1<br/>IAssessEvent] -->|trigger| Dispatcher[AssessEventDispatcher]
-    Event2[Event2<br/>IAssessEvent] -->|trigger| Dispatcher[AssessEventDispatcher]
-    Event3[Event3<br/>IAssessEvent] -->|trigger| Dispatcher[AssessEventDispatcher]
+```
+%% Events
+Event1[Event1<br/>IAssessEvent] -->|trigger| Dispatcher[AssessEventDispatcher]
+Event2[Event2<br/>IAssessEvent] -->|trigger| Dispatcher[AssessEventDispatcher]
+Event3[Event3<br/>IAssessEvent] -->|trigger| Dispatcher[AssessEventDispatcher]
 
-    %% Handlers
-    Handler1[Event1Handler<br/>BaseEventHandler&lt;Event1&gt;] -->|register| Dispatcher
-    Handler2[Event2Handler<br/>BaseEventHandler&lt;Event2&gt;] -->|register| Dispatcher
-    Handler3[Event3Handler<br/>BaseEventHandler&lt;Event3&gt;] -->|register| Dispatcher
+%% Handlers
+Handler1[Event1Handler<br/>BaseEventHandler&lt;Event1&gt;] -->|register| Dispatcher
+Handler2[Event2Handler<br/>BaseEventHandler&lt;Event2&gt;] -->|register| Dispatcher
+Handler3[Event3Handler<br/>BaseEventHandler&lt;Event3&gt;] -->|register| Dispatcher
 
-    %% Dispatcher dispatches to handlers
-    Dispatcher -->|dispatch Event1| Handler1
-    Dispatcher -->|dispatch Event2| Handler2
-    Dispatcher -->|dispatch Event3| Handler3
+%% Dispatcher dispatches to handlers
+Dispatcher -->|dispatch Event1| Handler1
+Dispatcher -->|dispatch Event2| Handler2
+Dispatcher -->|dispatch Event3| Handler3
 
 
-    %% Handlers call service
-    Handler1 -->|Invoke Business Logic| Service[ComplianceService]
-    Handler2 -->|Invoke Business Logic| Service
-    Handler3 -->|Invoke Business Logic| Service
+%% Handlers call service
+Handler1 -->|Invoke Business Logic| Service[ComplianceService]
+Handler2 -->|Invoke Business Logic| Service
+Handler3 -->|Invoke Business Logic| Service
 
-    classDef eventStyle fill:#e2e,stroke:#333,stroke-width:1px;
-    classDef dispatcherStyle fill:#11d,stroke:#333,stroke-width:1px;
-    classDef handlerStyle fill:#bfb,stroke:#333,stroke-width:1px;
-    classDef serviceStyle fill:#ffb,stroke:#333,stroke-width:1px;
+classDef eventStyle fill:#e2e,stroke:#333,stroke-width:1px;
+classDef dispatcherStyle fill:#11d,stroke:#333,stroke-width:1px;
+classDef handlerStyle fill:#bfb,stroke:#333,stroke-width:1px;
+classDef serviceStyle fill:#ffb,stroke:#333,stroke-width:1px;
 
-    class Event1,Event2,Event3 eventStyle
-    class Dispatcher dispatcherStyle
-    class Handler1,Handler2,Handler3 handlerStyle
-    class Service serviceStyle
+class Event1,Event2,Event3 eventStyle
+class Dispatcher dispatcherStyle
+class Handler1,Handler2,Handler3 handlerStyle
+class Service serviceStyle
+```
 
 </div>
 
@@ -82,23 +83,25 @@ classDiagram
       ...
     }
 
-    %% Interface
-    class IAssessEventHandler~T~ {
-        +HandleAsync(T assessEvent) : Task
-    }
+```
+%% Interface
+class IAssessEventHandler~T~ {
+    +HandleAsync(T assessEvent) : Task
+}
 
-    %% Abstract class
-    class BaseAssessEventHandler~T~ {
-        +HandleAsync(assessEvent: T) : Task
-        #DoAssessment(assessEvent: T) : Task~int~
-    }
+%% Abstract class
+class BaseAssessEventHandler~T~ {
+    +HandleAsync(assessEvent: T) : Task
+    #DoAssessment(assessEvent: T) : Task~int~
+}
 
-    %% Relationships
-    IAssessEventHandler~T~ <|.. BaseAssessEventHandler~T~
+%% Relationships
+IAssessEventHandler~T~ <|.. BaseAssessEventHandler~T~
+```
+
 </div>
 
 AssessEventDispatcher serves as the core component that realizes the Open/Closed Principle (OCP). It is responsible for registering the appropriate EventHandler for each event type and dispatching triggered events to their corresponding handlers for processing. This design allows new event types and handlers to be introduced without modifying the dispatcher’s internal logic, ensuring extensibility while preserving stability. When new events are defined and implemented, the existing code remains unchanged — it is closed for modification. New functionality is introduced by adding new event types and their corresponding EventHandler implementations — open for extension. 
-
 
 ```csharp
 public class AssessEventDispatcher
@@ -149,27 +152,10 @@ public abstract class BaseAssessEventHandler<T> : IAssessEventHandler<T> where T
 }
 ```
 
+#### Interfaces implementations
 
-####  Interfaces implementations
-All events will implement the IAssessEvent interface. Each type of event has a corresponding EventHandler responsible for encapsulating the logic for processing that event. BaseAssessEventHandler also implements the IAssessEventHandler interface. This is because all AssessEvent types in the project share a similar processing workflow: scoring → handling compliance → logging. Therefore, this process is extracted into the base class, allowing subclasses to focus solely on implementing their own scoring logic.
+For each Rubric, an Event implementing the `IAssessEvent` interface is defined to encapsulate the scoring parameters and the evaluation logic specific to that Rubric. In essence, all Events are inherently related to scoring, and their sole reason for modification is a change in the Rubric’s scoring parameters or rules. This design adheres to the **Single Responsibility Principle (SRP)**, as each Event focuses exclusively on the scoring concern of its corresponding Rubric.
 
-Each event class leverages Points and IsValid to encapsulate its domain-specific business logic: Points reflects the score computed according to the event’s specific rules, while IsValid determines whether the event is eligible for processing by the Dispatcher. Consequently, modifications to these classes are required only when the underlying business rules of their respective domains—such as scoring logic—change.
-<div class="mermaid">
-graph LR
-    A[Scoring] --> B[Handling Compliance]
-    B --> C[Logging]
+For each Rubric Assess event, a dedicated `EventHandler` implementing the `IAssessEventHandler` interface is defined. Since each Rubric applies distinct cumulative scoring logic, and a Payee’s risk level is determined by the aggregation of all Rubric scores, each `EventHandler` encapsulates the accumulation logic specific to its Rubric and persists the calculated result to the database. The only reason to modify an `EventHandler` is a change in the cumulative scoring logic of its associated Rubric. This design clearly upholds the **Single Responsibility Principle (SRP)**.
 
-    classDef scoringStyle fill:#111fff,stroke:#333,stroke-width:2px,corner-radius:10px,font-weight:bold;
-
-    class A scoringStyle;
-</div>
-
-In BaseAssessEventHandler, the HandleAsync method implements the workflow described above, while exposing the abstract DoAssessment method for subclasses to implement their own scoring logic.
-
-
-
-
-### OCP implementation
-
-
-
+## C﻿onslusion
