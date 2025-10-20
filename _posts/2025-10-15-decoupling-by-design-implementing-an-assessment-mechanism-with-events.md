@@ -159,3 +159,13 @@ For each Rubric, an Event implementing the `IAssessEvent` interface is defined t
 For each Rubric Assess event, a dedicated `EventHandler` implementing the `IAssessEventHandler` interface is defined. Since each Rubric applies distinct cumulative scoring logic, and a Payee’s risk level is determined by the aggregation of all Rubric scores, each `EventHandler` encapsulates the accumulation logic specific to its Rubric and persists the calculated result to the database. The only reason to modify an `EventHandler` is a change in the cumulative scoring logic of its associated Rubric. This design clearly upholds the **Single Responsibility Principle (SRP)**.
 
 ## C﻿onslusion
+
+Event-driven architecture decouples the **event producers** from the **event consumers**. Producers emit events without knowing who will handle them, while consumers subscribe to events and react independently. This separation allows systems to be more modular, extensible, and maintainable, as changes to one component don’t directly impact others.
+
+The Assessment Mechanism implementation fundamentally follows all SOLID principles, with particular emphasis on **SRP** and **OCP**. By analyzing these principles, this article aids in understanding decoupled design. In practice, identifying the stable and variable parts of an implementation within the task context and maintaining an **OCP mindset** allows developers to balance efficiency and quality amid changing requirements, effectively making adaptability a reality.
+
+
+
+### 💡 Tip: Embrace Decoupled Design
+
+Yesterday, we revisited the requirements, and one Rubric’s scoring rule had changed. Thanks to the decoupled **Assessment Mechanism**, I only needed to adjust a few properties and methods in the related Event and EventHandler. This experience highlights how designing for **modularity and decoupling** allows you to handle future changes with minimal effort, reinforcing confidence in maintaining flexible and maintainable code.
