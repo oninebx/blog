@@ -16,7 +16,7 @@ This was my latest practical experience in a real-world project, where I address
 
 This is a typical scenario requiring agile development: we need to design a stable structure that can flexibly handle uncertainty, and implement a design that follows OCP and SRP principles. For ease of description, I will refer to this design as the **Assessment Mechanism**. The "Rules" mentioned above will be defined as "**Rubrics**".
 
-## OCP & S﻿RP
+## OCP & SRP
 
 **The Open/Closed Principle (OCP)** means that a system should be **open for extension but closed for modification**. In practice, this means we can add new features or behaviors by extending existing code—such as adding new classes, events, or handlers—without changing the stable core logic. This reduces the risk of breaking existing functionality and makes the system easier to evolve.
 
@@ -69,11 +69,10 @@ graph TD
 
 </div>
 
+### IAssessEvent & IAssessEventHandler
 
+Programming to interfaces serves as the fundamental basis for realizing the Open/Closed Principle (OCP). Within the Assessment Mechanism, two interfaces are defined to facilitate the dispatching of events in AssessEventDispatcher, decoupling the event processing logic from specific implementations.
 
-### SRP imlementation
-
-All events will implement the IAssessEvent interface. The class diagram below shows two important properties.
 <div class="mermaid">
 classDiagram
     class IAssessEvent {
@@ -82,67 +81,95 @@ classDiagram
       +IsValid: bool
       ...
     }
+
+    %% Interface
+    class IAssessEventHandler~T~ {
+        +HandleAsync(T assessEvent) : Task
+    }
+
+    %% Abstract class
+    class BaseAssessEventHandler~T~ {
+        +HandleAsync(assessEvent: T) : Task
+        #DoAssessment(assessEvent: T) : Task~int~
+    }
+
+    %% Relationships
+    IAssessEventHandler~T~ <|.. BaseAssessEventHandler~T~
 </div>
 
-#### Points
-
-* Points represents the score calculated according to business rules.
-
-* Each event class encapsulates the business logic specific to its own domain independently. For example, the parameters used for calculations vary greatly between different events.
-
-* Each event class has only one reason to change — a change in the business rules of its own domain — and does not affect other event classes.
-
-
-#### IsValid
-
-* IsValid encapsulates the business logic that determines whether an event is valid, preventing the Dispatcher from dispatching invalid events to the corresponding EventHandler.
-
-* The criteria for validity may differ between events, reflecting the domain-specific rules of each event type.
-
-* While technically validity could be inferred from Points (for example, events with a score of 0 may require no processing and can be considered invalid), relying solely on the score hides important domain knowledge embedded in the business rules.
-
-* By defining IsValid as part of the IAssessEvent interface, each event class implements its own logic independently, so changes in the business rules of one event do not affect other events.
-
-#### Sample
-
-The following shows a partial implementation example of the ReportPageAssessEvent event.
+AssessEventDispatcher serves as the core component that realizes the Open/Closed Principle (OCP). It is responsible for registering the appropriate EventHandler for each event type and dispatching triggered events to their corresponding handlers for processing. This design allows new event types and handlers to be introduced without modifying the dispatcher’s internal logic, ensuring extensibility while preserving stability. When new events are defined and implemented, the existing code remains unchanged — it is closed for modification. New functionality is introduced by adding new event types and their corresponding EventHandler implementations — open for extension. 
 
 
 ```csharp
-public class ReportPageAssessEvent : IAssessEvent
+public class AssessEventDispatcher
 {
-  ...
-  private readonly Status _currentState;
-  private readonly Status _newState;
+  private readonly IDictionary<Type, object> _handlers = new Dictionary<Type, object>();
 
-  ...
-
-  public bool IsValid => _currentState == Status.Support || _newState == Status.Support
-
-  public int Points => (_currentState, _newState) switch
+  public void RegisterHandler<T>(IAssessEventHandler<T> handler) where T : IAssessEvent
   {
-    (_ Status.Support) => 1,
-    (Status.Support, _) => -1,
-    _ => 0
+    ...
+    var eventType = typeof(T);
+    ...
+    _handlers[eventType] = handler;
   }
-  ...
 
+  public async Task DispatchAsync<T>(T assessEvent) where T : IAssessEvent
+  {
+    ...
+    if (!assessEvent.IsValid)
+    {
+      return;
+    }
+
+    var eventType = assessEvent.GetType();
+    if (_handlers.TryGetValue(eventType, out var handler))
+    {
+      await ((IAssessEventHandler<T>)handler).HandleAsync(assessEvent);
+    }
+    ...
+  }
 }
-
 ```
 
-* Points represents the score calculated according to business rules:
+BaseAssessEventHandler implements the IAssessEventHandler interface and serves as an illustration of the Open/Closed Principle (OCP). The HandleAsync method encapsulates the stable, generic workflow for processing events, which is closed to modification. The abstract DoAssessment method, on the other hand, delegates the domain-specific scoring logic to concrete implementations, remaining open for extension and allowing new event types to be introduced without altering the existing workflow.
 
-* Supporting a report increases the score by 1.
+```csharp
+public abstract class BaseAssessEventHandler<T> : IAssessEventHandler<T> where T : IAssessment
+{
+  protected abstract Task<int> DoAssessment(T assessEvent);
 
-* If a report that was previously supported is later clarified, the score decreases by 1.
+  public async Task HandleAsync(T assessEvent)
+  {
+    var score  = await DoAssessment(assessEvent);
+    // Process Payee Compliance
+    ...
+    // Create Assessment log
+    ...
+  }
+}
+```
 
-* In all other cases, the score is 0.
 
-* IsValid encapsulates the criteria for event validity: an event is valid if either the current state or the new state is Support. Events that do not involve the Support status are considered invalid, since only Support contributes to the score.
+####  Interfaces implementations
+All events will implement the IAssessEvent interface. Each type of event has a corresponding EventHandler responsible for encapsulating the logic for processing that event. BaseAssessEventHandler also implements the IAssessEventHandler interface. This is because all AssessEvent types in the project share a similar processing workflow: scoring → handling compliance → logging. Therefore, this process is extracted into the base class, allowing subclasses to focus solely on implementing their own scoring logic.
 
-* By encapsulating both the scoring logic and the validity logic within ReportPageAssessEvent, the class makes the business rules and domain knowledge explicit, clear, and easy to maintain.
+Each event class leverages Points and IsValid to encapsulate its domain-specific business logic: Points reflects the score computed according to the event’s specific rules, while IsValid determines whether the event is eligible for processing by the Dispatcher. Consequently, modifications to these classes are required only when the underlying business rules of their respective domains—such as scoring logic—change.
+<div class="mermaid">
+graph LR
+    A[Scoring] --> B[Handling Compliance]
+    B --> C[Logging]
+
+    classDef scoringStyle fill:#111fff,stroke:#333,stroke-width:2px,corner-radius:10px,font-weight:bold;
+
+    class A scoringStyle;
+</div>
+
+In BaseAssessEventHandler, the HandleAsync method implements the workflow described above, while exposing the abstract DoAssessment method for subclasses to implement their own scoring logic.
+
 
 
 
 ### OCP implementation
+
+
+
