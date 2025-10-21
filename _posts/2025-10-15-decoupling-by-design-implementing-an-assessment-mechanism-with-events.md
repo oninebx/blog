@@ -28,9 +28,9 @@ At the same time, each Rubric focuses on a single, well-defined scoring responsi
 
 ## Event-driven Assessment Mechanism
 
-Eric Evans introduced the concept of Domain Event when explaining Domain-Driven Design. We won’t go into details here, what we need to know is that the purpose of Domain Events is to explicitly express business facts, decouple system modules, support asynchronous operations and eventual consistency, while also improving the system’s testability, maintainability, and auditability.
+The event mechanism was introduced to decouple system modules and minimize interdependencies among components. It also provides a clear way to express business events and improves the system’s testability, maintainability, and auditability.
 
-The diagram below illustrates the event-driven Assessment Mechanism I designed. I will now explain how it fulfills the purposes mentioned earlier.
+The following diagram illustrates how the event-driven Assessment Mechanism achieves decoupling between system modules.
 
 <div class="mermaid">
 graph TD
