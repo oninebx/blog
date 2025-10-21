@@ -35,7 +35,6 @@ The diagram below illustrates the event-driven Assessment Mechanism I designed. 
 <div class="mermaid">
 graph TD
 
-```
 %% Events
 Event1[Event1<br/>IAssessEvent] -->|trigger| Dispatcher[AssessEventDispatcher]
 Event2[Event2<br/>IAssessEvent] -->|trigger| Dispatcher[AssessEventDispatcher]
@@ -58,7 +57,7 @@ Handler2 -->|Invoke Business Logic| Service
 Handler3 -->|Invoke Business Logic| Service
 
 classDef eventStyle fill:#e2e,stroke:#333,stroke-width:1px;
-classDef dispatcherStyle fill:#11d,stroke:#333,stroke-width:1px;
+classDef dispatcherStyle fill:#66e,stroke:#333,stroke-width:1px;
 classDef handlerStyle fill:#bfb,stroke:#333,stroke-width:1px;
 classDef serviceStyle fill:#ffb,stroke:#333,stroke-width:1px;
 
@@ -66,7 +65,6 @@ class Event1,Event2,Event3 eventStyle
 class Dispatcher dispatcherStyle
 class Handler1,Handler2,Handler3 handlerStyle
 class Service serviceStyle
-```
 
 </div>
 
@@ -83,7 +81,6 @@ classDiagram
       ...
     }
 
-```
 %% Interface
 class IAssessEventHandler~T~ {
     +HandleAsync(T assessEvent) : Task
@@ -97,8 +94,6 @@ class BaseAssessEventHandler~T~ {
 
 %% Relationships
 IAssessEventHandler~T~ <|.. BaseAssessEventHandler~T~
-```
-
 </div>
 
 AssessEventDispatcher serves as the core component that realizes the Open/Closed Principle (OCP). It is responsible for registering the appropriate EventHandler for each event type and dispatching triggered events to their corresponding handlers for processing. This design allows new event types and handlers to be introduced without modifying the dispatcher’s internal logic, ensuring extensibility while preserving stability. When new events are defined and implemented, the existing code remains unchanged — it is closed for modification. New functionality is introduced by adding new event types and their corresponding EventHandler implementations — open for extension. 
