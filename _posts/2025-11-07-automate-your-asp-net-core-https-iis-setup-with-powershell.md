@@ -36,7 +36,7 @@ flowchart TD
 
 </div>
 
-The actual configuration is more complex than the flowchart; with multiple ASP.NET Core projects, site creation and certificate binding must be repeated for each project.
+The actual configuration is more complex than the flowchart suggests. For example, when dealing with multiple ASP.NET Core projects, site creation and certificate binding need to be performed individually for each project.
 
 Manual configuration of IIS sites and certificates is time-consuming, error-prone, and highly repetitive. It is difficult to manage at scale, hard to version or reproduce across environments, and does not integrate well with automated deployment pipelines, making consistent and efficient deployment challenging.
 
@@ -70,8 +70,6 @@ The script accepts several parameters to configure the IIS site and certificate:
 - **sitePath** – Defines the physical path for the website content.
 - **dnsName** – The DNS name to use when generating the self-signed certificate. The script will automatically create the corresponding host-to-IP mapping in the system.
 - **port** – The port number for the HTTPS binding.
-
-#### Optional parameters
 
 #### Optional Parameters
 
