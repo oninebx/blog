@@ -257,6 +257,11 @@ pagination:
     before: 2
     after: 2
 
+# Collections
+collections:
+  topics:
+    output: true
+    permalink: /topics/:id/
 
 # Plugins (previously gems:)
 plugins:

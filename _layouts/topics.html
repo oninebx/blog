@@ -1,0 +1,20 @@
+---
+layout: archive
+---
+
+<ul>
+{% for topic in site.data.topics %}
+  {% assign topic_posts = site.posts | where: "topic", topic.id %}
+  {% assign sorted_posts = topic_posts | sort: "date" | reverse %}
+  {% assign last_update = sorted_posts[0].date %}
+
+  <li>
+    <a href="{{ '/topics/' | append: topic.id | append: '/' | relative_url }}">
+      <h2>{{ topic.title }}</h2>
+    </a>
+
+    <p>Posts: {{ topic_posts | size }} · Updated at {{ last_update | date: "%Y-%m-%d" }}</p>
+
+  </li>
+{% endfor %}
+</ul>

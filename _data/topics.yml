@@ -1,0 +1,3 @@
+- id: ef-query-optimization
+  title: "Writing High-Quality Queries in Entity Framework Core"
+  description: "Learn how to optimize your Entity Framework queries for better performance."
