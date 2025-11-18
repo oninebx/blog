@@ -8,11 +8,13 @@ public_folder: "/uploads"
 collections:
   - name: "topics"
     label: "Topics"
-    folder: "_data"
-    create: false
-    fields:
-      - { label: "ID", name: "id", widget: "string" }
-      - { label: "Title", name: "title", widget: "string" }
+    files:
+      - label: "Topics Data"
+        name: "topics_data"
+        file: "_data/topics.yml"
+        fields:
+          - { label: "ID", name: "id", widget: "string" }
+          - { label: "Title", name: "title", widget: "string" }
 
   - name: "blog"
     label: "Blog"

@@ -1,3 +1,6 @@
 - id: ef-query-optimization
   title: "Writing High-Quality Queries in Entity Framework Core"
   description: "Learn how to optimize your Entity Framework queries for better performance."
+- id: ddd
+  title: Domain-Driven Design (DDD)
+  description: "Covers principles and practices of DDD, including aggregates, entities, value objects, repositories, services, and how to apply DDD in .NET applications."
