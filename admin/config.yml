@@ -6,6 +6,14 @@ media_folder: "uploads"
 public_folder: "/uploads"
 
 collections:
+  - name: "topics"
+    label: "Topics"
+    folder: "_data"
+    create: false
+    fields:
+      - { label: "ID", name: "id", widget: "string" }
+      - { label: "Title", name: "title", widget: "string" }
+
   - name: "blog"
     label: "Blog"
     folder: "_posts"
@@ -68,7 +76,7 @@ collections:
       - label: "Topic"
         name: "topic"
         widget: "relation"
-        collection: "topics"
+        collection: "topics" 
         search_fields: ["title"]
         value_field: "id"
         display_fields: ["title"]
