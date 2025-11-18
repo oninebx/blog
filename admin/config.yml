@@ -65,4 +65,11 @@ collections:
           - Code Refactoring
           - Clean Architecture
           - 杂感
+      - label: "Topic"
+        name: "topic"
+        widget: "relation"
+        collection: "topics"
+        search_fields: ["title"]
+        value_field: "id"
+        display_fields: ["title"]
       - { label: "Body", name: "body", widget: "markdown" }
