@@ -65,6 +65,9 @@ I’ve built an MVP with plugin-based pipelines and workers, autonomous scheduli
 
 Beyond CSV-to-SQLite synchronization, it also supports a wide range of features aligned with its core design principles, including flexible pipeline configuration, an extensible plugin architecture, and a SignalR-based real-time communication protocol with event mapping and processing architecture.
 
-![etl architecture]({{ "uploads/akkasync-introduction-dashboard.png" | relative_url }})
+[Try MVP now](https://github.com/oninebx/AkkaSync/releases/tag/assets-0.1.0-mvp.1)
+
+![akka demo dashboard]({{ "uploads/akkasync-demo-dashboard.png" | relative_url }})
+![akka demo sqlite]({{ "uploads/akkasync-demo-sqlite.png" | relative_url }})
 
 [https://github.com/oninebx/AkkaSync](https://github.com/oninebx/AkkaSync)
