@@ -1,5 +1,5 @@
 ---
-title: Plugin Architecture in .NET(2) - Contract, Registration, and Resolution
+title: Plugin Architecture in Practice(Part 2) - Contract, Registration, and Resolution
 date: 2026-02-06T20:14:47.310Z
 toc: true
 categories:

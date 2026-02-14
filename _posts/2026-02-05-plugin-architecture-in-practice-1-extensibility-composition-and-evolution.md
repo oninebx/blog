@@ -1,5 +1,5 @@
 ---
-title: Plugin Architecture in .NET(1) — Extensibility, Composition, and Evolution
+title: Plugin Architecture in Practice(Part 1) — Extensibility, Composition, and Evolution
 date: 2026-02-05T20:56:57.012Z
 toc: true
 categories:
