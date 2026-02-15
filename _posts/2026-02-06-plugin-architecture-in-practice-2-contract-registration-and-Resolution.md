@@ -8,6 +8,7 @@ tags:
   - C#
   - .NET
   - System Design
+topic: plugin-engineering
 ---
 In complex software systems, true extensibility doesn’t come from dynamically loading components—it comes from well-defined contracts that establish clear boundaries between responsibilities. A system built around explicit contracts allows new functionality to be added, replaced, or composed without breaking existing behavior.
 

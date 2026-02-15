@@ -8,6 +8,7 @@ tags:
   - .NET
   - C#
   - System Design
+topic: plugin-engineering
 ---
 
 The ideas discussed in this article originate from the plugin architecture implemented in AkkaSync, summarizing the design motivations and practical lessons learned during its development.

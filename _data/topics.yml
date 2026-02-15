@@ -4,3 +4,6 @@
 - id: ddd
   title: Domain-Driven Design (DDD)
   description: "Covers principles and practices of DDD, including aggregates, entities, value objects, repositories, services, and how to apply DDD in .NET applications."
+- id: plugin-engineering
+  title: Plugin Engineering
+  description: "Covers the design, development, and engineering practices of plugin systems in .NET, including lifecycles, dependency injection, concurrency, hot-plug integration, testing, and release management."
