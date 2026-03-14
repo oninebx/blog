@@ -38,24 +38,23 @@ collections:
         widget: "select"
         multiple: true
         options:
+          - C#
+          - .NET
           - ASP.NET
           - Entity Framework
           - LINQ
           - Authentication
           - Authorization
-          - C#
-          - .NET
           - JavaScript
           - TypeScript
           - Node.js
           - React
+          - Redux
           - Next.js
-          - Alpine.js
           - Tailwind CSS
           - SQL Server
           - T-SQL
           - Query Optimization
-          - Entity Framework Migrations
           - REST API
           - Visual Studio
           - VS Code
@@ -64,5 +63,8 @@ collections:
           - System Design
           - Code Refactoring
           - Clean Architecture
+          - Scalability
+          - Real-Time Systems
+          - Event-Driven Architecture
           - 杂感
       - { label: "Body", name: "body", widget: "markdown" }

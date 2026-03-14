@@ -7,3 +7,6 @@
 - id: plugin-engineering
   title: Plugin Engineering
   description: "Covers the design, development, and engineering practices of plugin systems in .NET, including lifecycles, dependency injection, concurrency, hot-plug integration, testing, and release management."
+- id: event-driven-realtime-system
+  title: Event-Driven Real-Time System
+  description: "A practical exploration of building event-driven real-time web applications, from backend events to live UI updates using SignalR, Redux and Akka.Net."
