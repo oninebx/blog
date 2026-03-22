@@ -74,7 +74,6 @@ Comment "0..*" --> "1" Profile : author
 Page "0..*" --> "1" Profile : Owned by
 
 Page "1" --> "1..*" Beneficiary : benefits
-
 </div>
 
 The diagram above illustrates the structure of Page, which can be used directly as the classes in the project, though it does not fully reflect the domain knowledge.

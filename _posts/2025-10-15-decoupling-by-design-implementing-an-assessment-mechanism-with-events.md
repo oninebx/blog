@@ -57,7 +57,8 @@ Handler2 -->|Invoke Business Logic| Service
 Handler3 -->|Invoke Business Logic| Service
 
 classDef eventStyle fill:#e2e,stroke:#333,stroke-width:1px;
-classDef dispatcherStyle fill:#66e,stroke:#333,stroke-width:1px;
+classDef dispatcherStyle fill:#11d,stroke:#333,stroke-width:1px;
+
 classDef handlerStyle fill:#bfb,stroke:#333,stroke-width:1px;
 classDef serviceStyle fill:#ffb,stroke:#333,stroke-width:1px;
 
@@ -153,7 +154,7 @@ For each Rubric, an Event implementing the `IAssessEvent` interface is defined t
 
 For each Rubric Assess event, a dedicated `EventHandler` implementing the `IAssessEventHandler` interface is defined. Since each Rubric applies distinct cumulative scoring logic, and a Payee’s risk level is determined by the aggregation of all Rubric scores, each `EventHandler` encapsulates the accumulation logic specific to its Rubric and persists the calculated result to the database. The only reason to modify an `EventHandler` is a change in the cumulative scoring logic of its associated Rubric. This design clearly upholds the **Single Responsibility Principle (SRP)**.
 
-## C﻿onslusion
+## Conslusion
 
 Event-driven architecture decouples the **event producers** from the **event consumers**. Producers emit events without knowing who will handle them, while consumers subscribe to events and react independently. This separation allows systems to be more modular, extensible, and maintainable, as changes to one component don’t directly impact others.
 
