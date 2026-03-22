@@ -43,34 +43,38 @@ var pluginTypes = assembly.GetTypes()
 ```
 The discovered pluginTypes will be used to instantiate plugin instances through service registration or runtime instantiation.
 
-## Two Approaches to Hot Loading
+## Two Moments of Hot Loading
 
-In practice, plugins can be loaded by the host process at two distinct moments. 
-The first occurs during application startup. The host scans the plugin directory and registers discovered providers into the dependency injection container as part of system initialization.This resembles a conventional boot-time loading phase, where plugins become available alongside other core services.
-The second occurs after the host is already running. When plugin DLLs are added, removed, or replaced in the plugin directory, the system reacts dynamically. This represents true hot loading: plugin instances are created at runtime and added to the existing plugin instance container without restarting the host.
+In practice, hot loading is not about different mechanisms, but about when the loading occurs.
 
-### Service Registration
-Service Registration is known as Interface-to-Implementation Registration and occurs during the host’s service registration phase. Discovered plugin interfaces and their corresponding implementations are registered into the container, typically using reflection to map interfaces to their concrete types. The following snippet shows the core implementation:
+In this design, plugin instantiation is consistently handled through runtime creation, while hot loading can take place at two distinct moments.
 
-```csharp
-...
-foreach (var type in types)
-{
-  var interfaces = type.GetInterfaces()
-                      .Where(i => i.IsGenericType
-                      && i.GetGenericTypeDefinition() == typeof(IPluginProvider<>));
-  foreach (var iface in interfaces)
-  {
-    Services.AddSingleton(iface, type);
-  }
-}
-...
-```
+### Startup Phase
+The first moment occurs during application startup.
 
-### Runtime Instantiation
-Runtime Instantiation is necessary because service registration resolves dependencies at construction time, producing a fixed snapshot that does not automatically update when new components are introduced at runtime. To support dynamic loading, instances must be created directly while still honoring dependency injection, rather than relying on container registration. This is achieved through a **DI-aware runtime instantiation mechanism**, which ensures that all required dependencies are correctly injected while allowing objects to be constructed on demand. By leveraging this approach, dynamically loaded components can be integrated immediately into the system without modifying the container or violating its lifecycle constraints.
+At this stage, the system scans the plugin directory, loads available plugin assemblies, and creates instances dynamically. This phase also handles any pending operations from previous runs, such as cleaning up or replacing plugins that were marked for deletion.
 
-The above design is implemented using ActivatorUtilities, and the core code is as follows:
+Although this happens during initialization, it still follows the same runtime instantiation model, ensuring consistency with the rest of the system.
+
+### Runtime Phase
+The second moment occurs after the application is already running.
+
+When plugin assemblies are added, updated, or removed in the plugin directory, the system reacts dynamically by loading new plugins or disposing of existing ones. Instances are created on demand and integrated into the system without requiring a restart.
+
+This represents true hot loading, where the system remains continuously available while adapting to changes.
+
+### Implementation
+
+In this section, I will walk through the core implementation of hot loading, focusing on the key mechanisms behind plugin loading and unloading.
+
+#### Dynamic Loading via Reflection
+I initially registered plugin providers as singleton instances during the service registration phase. However, this approach proved problematic.
+
+Instances held by the DI container cannot be fully unloaded at runtime, introducing unnecessary complexity in lifecycle management.
+
+By contrast, creating plugin instances dynamically via reflection allows references to be released, providing a simpler and more flexible solution for both startup and runtime hot loading.
+
+With this approach, creating plugin provider instances is simplified to the following code:
 
 ```csharp
 ...
@@ -90,9 +94,91 @@ foreach (var type in pluginTypes)
 
 ```
 
+#### Safe Unloading via Pending Delete
+In theory, a plugin assembly can be deleted at runtime once all references to its instances are released. In practice, however, it is difficult to precisely control the deletion timing, and even after unloading, the files may still be in use. The **pending delete mechanism** simplifies this process: unloaded plugins are marked as pending delete, no longer used by the system, and their files are safely cleaned up on the next application restart.
+
+To implement this mechanism, I introduced a registry.json file to track plugin package states and a shadow directory to host the loaded plugin assemblies.
+
+***Sample Plugins and Shadow folder***
+
+```text
+PluginsRoot/
+├── plugins/
+│   ├── AkkaSync.Plugins.Transformer.DbTable.zip
+│   ├── AkkaSync.Plugins.Source.File.zip
+│   ├── AkkaSync.Plugins.HistoryStore.InMemory.zip
+│   ├── AkkaSync.Plugins.Sink.Sqlite.zip
+│   └── registry.json
+└── shadow/
+    ├── AkkaSync.Plugins.Transformer.DbTable
+        ├── AkkaSync.Plugins.Transformer.DbTable.dll
+        ├── ...(dependent files)
+        └── manifest.json
+    ├── AkkaSync.Plugins.Source.File
+    ├── AkkaSync.Plugins.HistoryStore.InMemory
+    └── AkkaSync.Plugins.Sink.Sqlite
+```
+
+
+***Sample registry.json***
+
+```json
+[
+  {
+    "Id": "AkkaSync.Plugins.Transformer.DbTable",
+    "Version": "1.0.0",
+    "PendingDelete": false
+  },
+  {
+    "Id": "AkkaSync.Plugins.Source.File",
+    "Version": "1.0.0",
+    "PendingDelete": true
+  },
+  {
+    "Id": "AkkaSync.Plugins.HistoryStore.InMemory",
+    "Version": "1.0.0",
+    "PendingDelete": false
+  },
+  {
+    "Id": "AkkaSync.Plugins.Sink.Sqlite",
+    "Version": "1.0.0",
+    "PendingDelete": true
+  }
+]
+```
+
+The mechanism works by monitoring the Plugins directory. When a new plugin ZIP file is created, it is extracted into the shadow directory and loaded into the system. When a ZIP file is deleted, the corresponding PluginLoadContext is unloaded, and the pendingDelete flag in registry.json is set to true. The plugin files are then safely removed on the next application restart.
+
+```csharp
+...
+var fileKey = Path.GetFileName(path);
+
+var entries = await _pluginCatalog.GetAllAsync(p => p.Id == fileKey && p.Version == version);
+if (entries != null && entries.Count == 1)
+{
+  // mark plugin PendingDelete as true in registry.json file
+  var entryToUpdate = entries[0];
+  await _pluginCatalog.UpdateAsync(entryToUpdate with { PendingDelete = true});
+}
+
+if (_pluginContexts.TryGetValue(fileKey, out var context))
+{
+  // unload the plugin AssemblyLoadContext
+  context.Unload();
+  _pluginContexts.Remove(fileKey);
+  context = null;
+
+  // optional but recommended: Promptly release resources
+  GC.Collect();
+  GC.WaitForPendingFinalizers();
+  GC.Collect();
+}
+...
+```
+
 #### OCP via Adapter Pattern
 In implementing hot-pluggable support for multiple plugin types, the code was refactored to follow the Open-Closed Principle, ensuring that the hot-plug management logic remains unchanged when new plugin types are added.
-I will not go into further detail here. The core implementation uses the Adapter pattern to unify different generic plugin registries under a common type, greatly simplifying the code. Interested readers can refer to [PluginManagerActor](https://github.com/oninebx/AkkaSync/blob/main/src/AkkaSync.Infrastructure/PluginManagerActor.cs) and [PluginProviderRegistryAdapter](https://github.com/oninebx/AkkaSync/blob/main/src/AkkaSync.Core/PluginProviders/PluginProviderRegistryAdapter.cs) for the full implementation.
+I will not go into further detail here. The core implementation uses the Adapter pattern to unify different generic plugin registries under a common type, greatly simplifying the code. Interested readers can refer to [PluginLoaderActor](https://github.com/oninebx/AkkaSync/blob/main/src/AkkaSync.Infrastructure/PluginLoaderActor.cs) and [PluginProviderRegistryAdapter](https://github.com/oninebx/AkkaSync/blob/main/src/AkkaSync.Core/PluginProviders/PluginProviderRegistryAdapter.cs) for the full implementation.
 
 Let’s quickly compare the two.
 
@@ -171,5 +257,3 @@ IHistoryStore instances are slightly more complex: they are lazily initialized w
 ## Summary and Next Steps
 
 In this chapter, we have essentially completed the discussion on the design and practical development of AkkaSync’s plugin architecture. There may be a follow-up article exploring practical aspects of plugin development, such as testing, release, and version management, to provide more structured and controllable practices.
-
-
