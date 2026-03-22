@@ -257,5 +257,3 @@ IHistoryStore instances are slightly more complex: they are lazily initialized w
 ## Summary and Next Steps
 
 In this chapter, we have essentially completed the discussion on the design and practical development of AkkaSync’s plugin architecture. There may be a follow-up article exploring practical aspects of plugin development, such as testing, release, and version management, to provide more structured and controllable practices.
-
-
