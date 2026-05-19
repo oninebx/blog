@@ -213,6 +213,6 @@ flowchart TD
 
 This architecture establishes a solid foundation for managing real-time, event-driven state in a scalable and maintainable way. While the overall design is now in place, the frontend messaging infrastructure plays a crucial role in making it work seamlessly in practice.
 
-In the next post, I will dive into the implementation details of the frontend infrastructure, focusing on how incoming messages are parsed, dispatched, and integrated into the Redux store.
+In the next post, I will explore how raw events are mapped into consistent system state snapshots, focusing on a simple and extensible reducer-based design that evolves with the system.
 
 
