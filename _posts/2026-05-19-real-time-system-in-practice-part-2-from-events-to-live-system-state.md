@@ -9,6 +9,7 @@ tags:
   - System Design
   - Real-Time Systems
   - Scalability
+topic: event-driven-realtime-system
 ---
 A real-time system is only useful when its internal state becomes continuously observable. As AkkaSync evolved, it became clear that emitting events alone was not enough. What mattered was how those events were continuously reduced into a consistent and observable system state.
 
@@ -108,7 +109,7 @@ Some event definitions involve design trade-offs. For example, PipelineBatchProc
 
 ## Decoupling Event-to-State Mapping
 
-To support system evolution, decoupling is a fundamental engineering necessity. In the event-to-state mapping context, the goal is to decouple the mapping logic from both the state structure and the triggering events. All events are processed uniformly through reducers, which are responsible for producing state transitions.
+Still using Akka.NET Sync as the example, to support system evolution, decoupling is a fundamental engineering necessity. In the event-to-state mapping context, the goal is to decouple the mapping logic from both the state structure and the triggering events. All events are processed uniformly through reducers, which are responsible for producing state transitions.
 
 The model is built around three core abstractions:
 
