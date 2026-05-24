@@ -71,8 +71,6 @@ In a plugin ecosystem, the runtime plays a central role in orchestrating the var
 
 Beyond simply loading and unloading plugins or creating plugin instances, it is also responsible for managing versions, ensuring compatibility, and coordinating between the remote registry and local store.
 
-Beyond simply loading and unloading plugins or creating plugin instances, it is also responsible for managing versions, ensuring compatibility, and coordinating between the remote registry and local store.
-
 Version management, in particular, is primarily realized through the manifests maintained at both levels of the plugin store, specifically via the `registry.json` files.
 
 Version upgrades are achieved by comparing the remote and local registry.json manifests. The remote registry is immutable once published alongside a plugin, ensuring a stable source of truth, while the local registry is updated only after the corresponding plugin has been successfully updated locally. This approach enforces safe and controlled version transitions between the remote and local stores.
