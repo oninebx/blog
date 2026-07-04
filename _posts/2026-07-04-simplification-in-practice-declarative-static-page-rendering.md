@@ -1,6 +1,6 @@
 ---
 title: "Simplification in Practice: Declarative Static Page Rendering"
-date: 2026-07-04T22:23:01.630Z
+date: 2026-07-04T10:41:10.315Z
 toc: true
 categories:
   - Frontend
@@ -164,7 +164,7 @@ The rendering engine is responsible for turning a content tree into actual UI. I
 
 ## Implementation
 
-The implementation is intentionally kept lightweight and closely aligned with the architectural principles described above. The full source code can be found in the accompanying repository: https://github.com/oninebx/static-renderer.
+The implementation is intentionally kept lightweight and closely aligned with the architectural principles described above. The full source code can be found in the accompanying repository: [static renderer](https://github.com/oninebx/static-renderer).
 
 At a high level, the system is built around three core ideas:
 
